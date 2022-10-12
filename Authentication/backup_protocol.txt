@@ -1,0 +1,21 @@
+1] Failed Biometric Authentication
+
+- GUI prompted backup login sequence for password and security question
+    - Complexity standard for this (8 chars, 1 upper, 1 lower, 1 special)
+    - Security question/image/something else will be something they pick from a list and is either linked to the password or has its own customizable field
+        - Ex. answer to security question is customizable, image is not
+    - This will be the fail safe for all backup authentication methods even if the user decides to configure something else as a primary option
+- User can configure their primary backup method in user settings to attempt to login that way first, however if that method fails then they must use fail safe method
+
+
+2] Device unreachable
+
+- This will be a case in which the device stops working completely or the device is lost/damaged. 
+- Full Data Backup
+    - We could offer this for user convenience if they user wants to extract the data but at this point the security of the data is out of our hands
+    - If at any point they want to take data off of the device that’s not in our domain
+Options for this:
+- Extract to cloud backup
+- Extract to USB
+- Extract to local file
+

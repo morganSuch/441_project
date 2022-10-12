@@ -1,0 +1,27 @@
+Asymmetric/Symmetric Encryption Method (slower method)
+
+Assumptions: 
+User has been authenticated if they have access to main menu (this should be considered as a secure session with all communications being secure until timeout)
+User has been provided with the public key from the client
+
+Storing a new password:
+1] GUI: User enters new password 
+Encryption happens with public key (client)
+2] GUI: Relay password information to the server
+3] Server: send write request to the client 
+4] Server: sends password information to the client
+5] Client: receives password from server
+6] Client: writes password to database
+
+Accessing a stored password:
+1] GUI: User requests to view stored password
+2] GUI: relays password ID to server
+3] Server: sends read request to client
+4] Server: sends password ID to client
+5] Client: looks up password with ID
+Decryption happens with private key (client)
+Encryption happens with public key (server)
+6] Client: sends data to server
+7] Server: sends encrypted password to GUI
+Decryption happens with private key (server)
+8] GUI: Displays password in plain text
