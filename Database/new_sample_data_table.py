@@ -20,4 +20,16 @@ conn.execute("INSERT INTO PASSWORDS (APPLICATION,EMAIL_USERNAME,PASSWORD) \
 
 conn.commit()
 print("Records created successfully")
+
+conn.execute('''CREATE TABLE FACIAL_RECOGNITION
+         (NAMEID INT IDENTTITY PRIMARY KEY            NOT NULL,
+         FULL_NAME               NVARCHAR(50)        NOT NULL,
+         PICFILENAME             NVARCHAR(100),
+         IMAGE_ID                VARBINARY(max));''')
+
+print("Table2 created successfully")
+
+conn.commit()
+
+print("Records 2 created successfully")
 conn.close()
