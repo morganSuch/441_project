@@ -1,5 +1,6 @@
 import sqlite3
  
+#max = 10
 # Connecting to sqlite
 # connection object
 connection_obj = sqlite3.connect('geek.db')
@@ -11,30 +12,27 @@ cursor_obj = connection_obj.cursor()
 cursor_obj.execute("DROP TABLE IF EXISTS GEEK")
  
 # Creating table
-table = """ CREATE TABLE Sample_table (
+table = """ CREATE TABLE test_table (
             Application VARCHAR(255) NOT NULL,
             Email_Username CHAR(25) NOT NULL,
-            Password CHAR(25),
+            Password CHAR(25)
         ); """
-
-
- 
 cursor_obj.execute(table)
  
 print("Table is Ready")
 
-cursor_obj.execute("INSERT INTO Sample_table (Application, Email_Username, Password) \
+cursor_obj.execute("INSERT INTO test_table (Application, Email_Username, Password) \
    VALUES \
        ('Facebook', 'georgelopez3@gmail.com', 'IamGeorgeLopez3'), \
-       ('Myspace', 'gregory.bilt@gmail.com', 'biltlikegreg2')");
+       ('Myspace', 'gregory.bilt@gmail.com', 'biltlikegreg2')")
 
 print("Table values have been inserted")
 
 #creating picture table
 table2 = """ CREATE TABLE Facial_recognition (
-             NameID INT IDENTITY PRIMARY KEY NOT NULL
-             Full_Name NVARCHAR(50)
-             picFileName NVARCHAR(100)
+             NameID INT IDENTITY PRIMARY KEY NOT NULL,
+             Full_Name NVARCHAR(50),
+             picFileName NVARCHAR(100),
              Image_ID VARBINARY (max)
         ); """
         
