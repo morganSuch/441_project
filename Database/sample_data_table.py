@@ -39,6 +39,7 @@ table2 = """ CREATE TABLE Facial_recognition (
         ); """
         
 cursor_obj.execute(table2)
+print(cursor_obj.fetchall())
 
 print("Table 2 is Ready")
 

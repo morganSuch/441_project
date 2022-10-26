@@ -21,6 +21,7 @@ table = """ CREATE TABLE GEEK (
 cursor_obj.execute(table)
  
 print("Table is Ready")
+print(cursor_obj.fetchall())
  
 # Close the connection
 connection_obj.close()
