@@ -14,7 +14,7 @@ cursor_obj.execute("DROP TABLE IF EXISTS GEEK")
 table = """ CREATE TABLE Sample_table (
             Application VARCHAR(255) NOT NULL,
             Email_Username CHAR(25) NOT NULL,
-            Password CHAR(25),
+            Password CHAR(25)
         ); """
 
 
