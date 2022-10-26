@@ -5,6 +5,8 @@ import sqlite3
 conn = sqlite3.connect('test.db')
 print("Opened database successfully")
 
+conn.execute("DROP TABLE IF EXISTS PASSWORDS")
+
 conn.execute('''CREATE TABLE PASSWORDS
          (APPLICATION           CARCHAR(255)    NOT NULL,
          EMAIL_USERNAME         CHAR(50)        NOT NULL,
@@ -20,6 +22,8 @@ conn.execute("INSERT INTO PASSWORDS (APPLICATION,EMAIL_USERNAME,PASSWORD) \
 
 conn.commit()
 print("Records created successfully")
+
+conn.execute("DROP TABLE IF EXISTS FACIAL_RECOGNITION")
 
 conn.execute('''CREATE TABLE FACIAL_RECOGNITION
          (NAMEID INT IDENTTITY PRIMARY KEY            NOT NULL,
