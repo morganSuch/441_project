@@ -8,13 +8,15 @@ scanner = adafruit_fingerprint.Adafruit_Fingerprint(uart)
 location = 1 # Location the fingerprint is stored on the fingerprint scanner
 
 for img in range(1,3):
+    scanner.set_led(color=3, mode=2)
     while True:
         i = scanner.get_image()
         if i == adafruit_fingerprint.OK:
             scanner.set_led(color=2, mode=2) # Sets led to flashing blue
             break
         if i == adafruit_fingerprint.NOFINGER:
-            scanner.set_led(color=3, mode=2) # Sets led to flashing purple
+            #scanner.set_led(color=3, mode=2) # Sets led to flashing purple
+            pass
         else: # Error occurs
             scanner.set_led(color=2, mode=2) # Sets led to flashing red
             print("An error occurred")
