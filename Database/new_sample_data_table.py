@@ -6,7 +6,7 @@ conn = sqlite3.connect('test.db')
 cursor = conn.cursor()
 print("Opened database successfully")
 
-cursor.execute("DROP TABLE IF EXISTS PASSWORDS")
+#cursor.execute("DROP TABLE IF EXISTS PASSWORDS")
 
 cursor.execute('''CREATE TABLE PASSWORDS
          (APPLICATION           CARCHAR(255)    NOT NULL,
