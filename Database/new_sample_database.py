@@ -8,11 +8,11 @@ print("Opened database successfully")
 
 #cursor.execute("DROP TABLE IF EXISTS PASSWORDS")
 
-# cursor.execute('''INSERT INTO PASSWORDS
-#          (APPLICATION           CARCHAR(255)    NOT NULL,
-#          EMAIL_USERNAME         CHAR(50)        NOT NULL,
-#          PASSWORD                CHAR(50));''')
-# print("Table created successfully")
+cursor.execute('''CREATE TABLE PASSWORDS
+         (APPLICATION           CHAR(255)    NOT NULL,
+         EMAIL_USERNAME         CHAR(50)        NOT NULL,
+         PASSWORD                CHAR(50));''')
+print("Table created successfully")
 
 s_app = input('Application: ')
 s_email_user = input('Email/Username: ')
