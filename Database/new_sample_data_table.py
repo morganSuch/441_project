@@ -54,6 +54,7 @@ conn.commit()
 
 print("Records 2 created successfully")
 """
+#closes SQLite connection
 if (conn):
          conn.close()
-         print("\nThe SQLite connection is closed
+         print("\nThe SQLite connection is closed.")
