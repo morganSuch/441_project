@@ -65,7 +65,7 @@ def edit_information(cursor,conn):
       print("Records successfully edited")
       
 def delete_information(cursor, conn):
-      s_delete = input("What application data would you like to delete? ')
+      s_delete = input('What application data would you like to delete? ')
       cursor.execute("""
             DELETE FROM PASSWORDS
             WHERE APPLICATION = ?
