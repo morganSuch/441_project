@@ -71,7 +71,7 @@ def delete_information(cursor, conn):
             WHERE APPLICATION = ?
             """, (s_delete))
       conn.commit()
-      print("Records successfully edited")           
+      print("Records successfully deleted")           
 def close_connection(conn):
       #closes SQLite connection
       if (conn):
@@ -104,7 +104,7 @@ while(True):
             cursor = database.cursor()
             edit_information(cursor, database)
             close_connection(database)
-      if(menu_option == ("4"):
+      if(menu_option == "4"):
             name = input("Enter a name for the new database: ")
             database = connect_database(name)
             cursor = database.cursor()
