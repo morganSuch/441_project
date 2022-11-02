@@ -17,7 +17,7 @@ txt.focus()
 
 # Creating a command that will occur on a button click
 def clicked():
-    lbl.configure(text="Button was clicked !!", font=("Arial Bold", 20))
+    lbl.configure(text="Button was clicked !!", font=("Courier", 20))
 
 def getText():
     res = "Welcome to " + txt.get()
