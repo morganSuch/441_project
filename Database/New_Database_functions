@@ -47,9 +47,9 @@ def edit_information(cursor,conn):
                         noVerify = False
                   cursor.execute("""
                         UPDATE PASSWORDS \
-                        SET PASSWORD = s_password \
-                        WHERE APPLICATION = s_app
-                        """)
+                        SET PASSWORD = ? \
+                        WHERE APPLICATION = ?
+                        """, (s_password, s_app))
             if s_changing == s_email_user_change:
                   s_email_user = input('New Email/Username: ')
                   s_email_user2 = input('Verify New Email/Username: ')
@@ -57,9 +57,9 @@ def edit_information(cursor,conn):
                         noVerify = False
                   cursor.execute("""
                         UPDATE PASSWORDS \
-                        SET EMAIL_USERNAME = s_email_user \
-                        WHERE APPLICATION = s_app
-                        """)
+                        SET EMAIL_USERNAME = ? \
+                        WHERE APPLICATION = ?
+                        """, (s_email_user, s_app))
       conn.commit()
       print("Records successfully edited")
 def close_connection(conn):
