@@ -91,5 +91,5 @@ while(True):
             name = input("Enter a name for the new database: ")
             database = connect_database(name)
             cursor = database.cursor()
-            edit_password(cursor, database)
+            edit_information(cursor, database)
             close_connection(database)
