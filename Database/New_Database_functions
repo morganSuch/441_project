@@ -33,7 +33,7 @@ def add_password(cursor, conn):
       conn.commit()
       print("Records created successfully")
 
-def edit_password(cursor,conn):
+def edit_information(cursor,conn):
       s_app = input('Application: ')
       s_changing = input('Would you like to change the email/username or password? (Type "email/username" or "password") ')
       s_password_change = "password"
@@ -71,7 +71,8 @@ def close_connection(conn):
 while(True):
       print("DATABASE MENU\n")
       print("1    Create a new database")
-      print("2    Add records to a databse\n")
+      print("2    Add records to a database\n")
+      print("3    Edit records in database\n")
 
       menu_option = input("Please enter a menu option: ")
       if (menu_option == "1"):
@@ -85,4 +86,10 @@ while(True):
             database = connect_database(name)
             cursor = database.cursor()
             add_password(cursor, database)
+            close_connection(database)
+      if(menu_option == "3"):
+            name = input("Enter a name for the new database: ")
+            database = connect_database(name)
+            cursor = database.cursor()
+            edit_password(cursor, database)
             close_connection(database)
