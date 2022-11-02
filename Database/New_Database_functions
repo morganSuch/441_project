@@ -60,8 +60,18 @@ def edit_information(cursor,conn):
                         SET EMAIL_USERNAME = ? \
                         WHERE APPLICATION = ?
                         """, (s_email_user, s_app))
+                  
       conn.commit()
       print("Records successfully edited")
+      
+def delete_information(cursor, conn):
+      s_delete = input("What application data would you like to delete? ')
+      cursor.execute("""
+            DELETE FROM PASSWORDS
+            WHERE APPLICATION = ?
+            """, (s_delete))
+      conn.commit()
+      print("Records successfully edited")           
 def close_connection(conn):
       #closes SQLite connection
       if (conn):
@@ -73,6 +83,7 @@ while(True):
       print("1    Create a new database")
       print("2    Add records to a database\n")
       print("3    Edit records in database\n")
+      print("4    Delete records in database\n")
 
       menu_option = input("Please enter a menu option: ")
       if (menu_option == "1"):
@@ -92,4 +103,10 @@ while(True):
             database = connect_database(name)
             cursor = database.cursor()
             edit_information(cursor, database)
+            close_connection(database)
+      if(menu_option == ("4"):
+            name = input("Enter a name for the new database: ")
+            database = connect_database(name)
+            cursor = database.cursor()
+            delete_information(cursor, database)
             close_connection(database)
