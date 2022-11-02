@@ -22,7 +22,6 @@ def findFinger() -> bool:
         if scanner.image_2_tz(1) != adafruit_fingerprint.OK:
             scanner.set_led(color=1, mode=2)
             print("An error occurred")
-            count += 1
 
         if scanner.finger_search() != adafruit_fingerprint.OK:
             scanner.set_led(color=1, mode=3)
