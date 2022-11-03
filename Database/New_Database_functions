@@ -38,7 +38,7 @@ def add_password(cursor, conn):
 def edit_information(cursor,conn):
       s_app = input('Application: ')
       correct_input = True
-      while correct_input
+      while correct_input:
             s_changing = input('Would you like to change the email/username or password? (Type "email/username" or "password") ')
             s_password_change = "password"
             s_email_user_change = "email/username"
