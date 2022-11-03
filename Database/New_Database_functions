@@ -46,6 +46,7 @@ def edit_information(cursor,conn):
                   correct_input = False
             else:
                   print("Your input did not match "email/username" or "password")
+                  print("time to break")
       noVerify = True
       while noVerify:
             if s_changing == s_password_change:
