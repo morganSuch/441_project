@@ -4,7 +4,7 @@ import sqlite3
 
 conn = sqlite3.connect('test.db')
 print("Opened database successfully")
-
+max = 800
 conn.execute("DROP TABLE IF EXISTS PASSWORDS")
 
 conn.execute('''CREATE TABLE PASSWORDS
@@ -29,7 +29,7 @@ conn.execute('''CREATE TABLE FACIAL_RECOGNITION
          (NAMEID INT IDENTTITY PRIMARY KEY            NOT NULL,
          FULL_NAME               NVARCHAR(50)        NOT NULL,
          PICFILENAME             NVARCHAR(100),
-         IMAGE_ID                VARBINARY(max));''')
+         IMAGE_ID                VARBINARY(8000));''')
 
 print("Table2 created successfully")
 

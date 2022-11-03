@@ -22,6 +22,7 @@ for img in range(1,3):
             print("An error occurred")
             #return False
     i = scanner.image_2_tz(img)
+
     if i == adafruit_fingerprint.OK:
         print("Fingerprint template made")
     else:
@@ -31,6 +32,7 @@ for img in range(1,3):
         time.sleep(1)
         while i != adafruit_fingerprint.NOFINGER:
             i = scanner.get_image()
+        
     i = scanner.create_model()
     if i == adafruit_fingerprint.OK:
         print("Model created")
