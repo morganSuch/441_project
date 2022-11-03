@@ -78,18 +78,23 @@ def edit_information(cursor,conn):
       print("Records successfully edited")
       
 def delete_information(cursor, conn):
-      s_delete = input('What application data would you like to delete? ')
-      cursor.execute("""
-            SELECT COUNT(DISTINCT APPLICATION) \
-            FROM PASSWORDS \
-            WHERE APPLICATION = ?
-            """, (s_delete,))
-      cursor.execute("""
-            DELETE FROM PASSWORDS
-            WHERE APPLICATION = ?
-            """, (s_delete,))
+      noVerify = True
+      while noVerify:
+            s_delete = input('What application data would you like to delete? ')
+            cursor.execute(""" SELECT EXISTS (SELECT APPLICATION
+                                          FROM PASSWORDS
+                                          WHERE APPLICATION = ?
+                                          """, (s_delete,))
+            if(cursor.fetchone()):
+                  cursor.execute("""
+                  DELETE FROM PASSWORDS
+                  WHERE APPLICATION = ?
+                  """, (s_delete,))
+                  noVerify = FALSE
+            else:
+                  print("This application was not in our records")
       conn.commit()
-      print("Records successfully deleted")           
+      print("Records successfully deleted")        
 def close_connection(conn):
       #closes SQLite connection
       if (conn):
