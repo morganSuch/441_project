@@ -24,6 +24,8 @@ def add_password(cursor, conn):
             s_password2 = input('Verify Password: ')
             if s_password == s_password2:
                         noVerify = False
+            else:
+                  print("Your passwords did not match. Please try again.")
 
       cursor.execute("""
             INSERT INTO PASSWORDS (APPLICATION,EMAIL_USERNAME,PASSWORD) \
@@ -35,9 +37,15 @@ def add_password(cursor, conn):
 
 def edit_information(cursor,conn):
       s_app = input('Application: ')
-      s_changing = input('Would you like to change the email/username or password? (Type "email/username" or "password") ')
-      s_password_change = "password"
-      s_email_user_change = "email/username"
+      correct_input = True
+      while correct_input
+            s_changing = input('Would you like to change the email/username or password? (Type "email/username" or "password") ')
+            s_password_change = "password"
+            s_email_user_change = "email/username"
+            if s_changing == s_password_change or s_changing == s_email_user_change:
+                  correct_input = False
+            else:
+                  print("Your input did not match "email/username" or "password")
       noVerify = True
       while noVerify:
             if s_changing == s_password_change:
