@@ -87,7 +87,7 @@ def delete_information(cursor, conn):
                   DELETE FROM PASSWORDS
                   WHERE APPLICATION = ?
                   """, (s_delete,))
-                  noVerify = FALSE
+                  noVerify = False
             else:
                   print("This application was not in our records")
       conn.commit()
