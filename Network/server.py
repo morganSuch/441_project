@@ -2,7 +2,7 @@
 import socket
 from pickle import loads, dumps
 
-from menu import authenticate
+from menu import start_authentication
 
 # this can be a hostname or IP address, empty string for all connections allowed
 #HOST = "127.0.0.1"  # Standard loopback interface address (localhost)
@@ -25,7 +25,8 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
     while True:
         data = conn.recv(1024).decode()
         if str(data) == "menu":
-            authenticate()
+            # run start authentication from GUI
+            start_authentication(conn)
         if not data:
             break
         print("from connected user: " + str(data))
@@ -33,3 +34,11 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         conn.send(data.encode())
 
     conn.close()
+
+# def send_authenticate(conn) -> bool:
+#     conn.send("authorize".encode())
+#     response = conn.recv(1024).decode()
+#     if str(response) == "yes":
+#         return True
+#     else:
+#         return False
