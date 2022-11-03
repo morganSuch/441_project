@@ -83,7 +83,7 @@ def delete_information(cursor, conn):
             SELECT COUNT(DISTINCT APPLICATION) \
             FROM PASSWORDS \
             WHERE APPLICATION = ?
-            """, (s_delete,)
+            """, (s_delete,))
       cursor.execute("""
             DELETE FROM PASSWORDS
             WHERE APPLICATION = ?
