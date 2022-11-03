@@ -81,10 +81,7 @@ def delete_information(cursor, conn):
       noVerify = True
       while noVerify:
             s_delete = input('What application data would you like to delete? ')
-            cursor.execute(""" SELECT EXISTS (SELECT APPLICATION \
-                                          FROM PASSWORDS \
-                                          WHERE APPLICATION = ? 
-                                          """, (s_delete,))
+            cursor.execute(""" SELECT EXISTS (SELECT APPLICATION FROM PASSWORDS WHERE APPLICATION = ?) """, (s_delete,))
             if(cursor.fetchone()):
                   cursor.execute("""
                   DELETE FROM PASSWORDS
