@@ -17,11 +17,8 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
     
     message = input("->")
     while message.lower().strip() != 'bye':
-        if(message.lower().strip() == 'menu'):
-            loginMenu()
         s.send(message.encode())
         data = s.recv(1024).decode()
-
         print("Received from server: " + data)
         message = input("->")
     
