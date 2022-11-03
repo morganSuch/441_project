@@ -80,6 +80,11 @@ def edit_information(cursor,conn):
 def delete_information(cursor, conn):
       s_delete = input('What application data would you like to delete? ')
       cursor.execute("""
+            SELECT COUNT(DISTINCT APPLICATION) \
+            FROM PASSWORDS \
+            WHERE APPLICATION = ?
+            """, (s_delete,)
+      cursor.execute("""
             DELETE FROM PASSWORDS
             WHERE APPLICATION = ?
             """, (s_delete,))
