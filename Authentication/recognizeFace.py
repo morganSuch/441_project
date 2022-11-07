@@ -19,6 +19,7 @@ try:
         known_faces.append(face_recognition.face_encodings(image)[0])
     image = face_recognition.load_image_file("face.jpg")
     unknown_face = face_recognition.face_encodings(image)[0]
+    os.remove("face.jpg")
     results = face_recognition.compare_faces(known_faces, unknown_face)
     for i in results:
         if i == True:
