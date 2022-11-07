@@ -13,7 +13,18 @@ def create_databse(cursor):
             (APPLICATION           CARCHAR(255)    NOT NULL,
             EMAIL_USERNAME         CHAR(50)        NOT NULL,
             PASSWORD                CHAR(50));''')
-      print("Table created successfully\n")
+      
+      cursor.execute("DROP TABLE IF EXISTS FACIALREC")
+      
+      print("Passwords Table created successfully.\n")
+      
+      cursor.execute('''CREATE TABLE FACIALREC
+            (NAMEID     INT   IDENTITY    PRIMARY KEY NOT NULL,
+            FULL_NAME               NVARCHAR(50)      NOT NULL,
+            PICFILENAME             NVARCHAR(100),
+            IMAGE_ID                BLOB);''')
+      
+      print("Facial Recognition Table created successfully.\n")
 
 def add_password(cursor, conn):
       s_app = input('Application: ')
