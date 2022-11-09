@@ -129,6 +129,22 @@ def addFacial(cursor, conn, photo):
       conn.commit()
       print("Records created successfully")
 
+def deleteFacial(cursor, conn)
+      noVerify = True
+      while noVerify:
+            s_delete = input('Whose facial recognition data would you like to delete? Please enter full name.  ')
+            cursor.execute(""" SELECT EXISTS (SELECT FULL_NAME FROM FACIALREC WHERE FULL_NAME = ?) """, (s_delete,))
+            if(cursor.fetchone()[0]):
+                  cursor.execute("""
+                  DELETE FROM FACIALREC
+                  WHERE FULL_NAME = ?
+                  """, (s_delete,))
+                  noVerify = False
+            else:
+                  print("This person's facial recognition data was not in our records.\n")
+      conn.commit()
+      print("Records successfully deleted\n")
+      
 def close_connection(conn):
       #closes SQLite connection
       if (conn):
