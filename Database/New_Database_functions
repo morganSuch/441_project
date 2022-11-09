@@ -129,7 +129,7 @@ def addFacial(cursor, conn, photo):
       conn.commit()
       print("Records created successfully")
 
-def deleteFacial(cursor, conn)
+def deleteFacial(cursor, conn):
       noVerify = True
       while noVerify:
             s_delete = input('Whose facial recognition data would you like to delete? Please enter full name.  ')
