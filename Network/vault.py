@@ -2,7 +2,7 @@
 #from ssl import _PasswordType
 from tkinter import *
 
-def vaultScreen(root):
+def vaultScreen(root, conn):
     window = Toplevel(root)
     window.geometry('500x500')
     window.title("Password Manager")
@@ -40,12 +40,3 @@ def hide_password(hide, window, password):
     password.grid(column=0, row=1)
     hide.grid(column=1, row=1)
     hide.configure(text="***************", font=("Courier bold", 20))
-
-
-#vaultScreen()
-
-
-    # adding a text box that can be used for user input
-    # txt_box = Entry(window,width=20)
-    # txt_box.grid(column=0, row=2)
-    # txt_box.focus()

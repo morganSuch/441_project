@@ -4,8 +4,8 @@ import socket
 
 from menu import *
 
-#HOST = socket.gethostname()
-HOST = "169.254.177.83"  # The server's hostname or IP address
+HOST = socket.gethostname()
+#HOST = "169.254.177.83"  # The server's hostname or IP address
 PORT = 65432  # The port used by the server
 
 # create socket object
@@ -27,4 +27,3 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
 
 
 print(f"Received {message!r}")
-

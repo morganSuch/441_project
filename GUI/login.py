@@ -1,23 +1,29 @@
-import tkinter as tk
-from tkinter import ttk
+#!/usr/bin/python
+import logging
+from tkinter import *
+from vault import *
 
-root = tk.Tk()
-root.title('Login')
-root.geometry("350x220")
+def authenticate():
+    root = Tk()
+    root.geometry("300x150")
+    root.title('Authentication Screen')
+
+    page_title = Label(root, text="  AUTHENTICATE", font=("Courier bold", 25))
+    page_title.grid(column=5, row=0)
+
+    login = Button(root, bg="blue", fg="white", text="LOGIN",font=("Courier bold", 30), command=lambda: client_login(root))
+    login.grid(column=5, row=6)
+
+    root.mainloop()
 
 
-fields = {}
+def client_login(top_screen):
+    if(trigger_auth):
+        vaultScreen(top_screen)
 
-fields['username_label'] = ttk.Label(text='Username:')
-fields['username'] = ttk.Entry()
+def trigger_auth() -> bool:
+    print("Authentication triggered")
+    
+    return True
 
-fields['password_label'] = ttk.Label(text='Password:')
-fields['password'] = ttk.Entry(show="*")
-
-
-for field in fields.values():
-    field.pack(anchor=tk.W, padx=10, pady=5, fill=tk.X)
-
-ttk.Button(text='Login').pack(anchor=tk.W, padx=10, pady=5)
-
-root.mainloop()
+authenticate()
