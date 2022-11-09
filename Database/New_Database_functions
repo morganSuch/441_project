@@ -109,13 +109,31 @@ def delete_information(cursor, conn):
             else:
                   print("This application was not in our records.\n")
       conn.commit()
-      print("Records successfully deleted\n")        
+      print("Records successfully deleted\n")  
+
+def convertToBinaryData(filename):
+      #converts the file to binary format
+      with open(filename, 'rb') as file:
+            blobData = file.read()
+      return blobData
+
+def addFacial(cursor, conn, photo):
+      faceRecPhoto = convertToBinaryData(photo)
+      personName = input('Who is this image authenticating? Please enter full name. ')
+      picFileName = input('What would you like this image name saved as? ')
+      cursor.execute("""
+            INSERT INTO FACIALREC (NAMEID,FULL_NAME,PICFILENAME,IMAGE_ID) \
+            VALUE (?,?,?) \
+            """, (personName, picFileName, faceRecPhoto))
+      
+      conn.commit()
+      print("Records created successfully")
+
 def close_connection(conn):
       #closes SQLite connection
       if (conn):
             conn.close()
-
-
+            
 while(True):
       print("DATABASE MENU\n")
       print("1    Create a new database\n")
