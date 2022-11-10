@@ -30,7 +30,7 @@ def findFinger() -> bool:
             scanner.set_led(color=1, mode=3)
             print("Finger not found")
             count +=1
-            sleep(1)
+            time.sleep(1)
         else:
             scanner.set_led(color=2, mode=3)
             print("Finger found")
