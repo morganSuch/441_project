@@ -6,6 +6,7 @@ from print_functions import *
 from server_functions import *
 from menu import *
 
+# Main function for bringing up application login screen
 def start_authentication(conn):
     root = Tk()
     root.geometry("300x150")
@@ -19,6 +20,8 @@ def start_authentication(conn):
 
     root.mainloop()
 
+# When login button is pressed,triggers send_authenticate server function
+# to make authentication request to server
 def trigger_auth(top_screen, conn):
     if send_authenticate(conn):
         print("Authentication triggered")

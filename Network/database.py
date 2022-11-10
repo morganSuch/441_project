@@ -10,79 +10,77 @@ def create_databse(cursor):
       cursor.execute("DROP TABLE IF EXISTS PASSWORDS")
 
       cursor.execute('''CREATE TABLE PASSWORDS
-            (APPLICATION           CARCHAR(255)    NOT NULL,
-            EMAIL_USERNAME         CHAR(50)        NOT NULL,
-            PASSWORD                CHAR(50));''')
+            (APPLICATION      CARCHAR(255)    NOT NULL,
+            USERNAME    CHAR(50)        NOT NULL,
+            PASSWORD    CHAR(50));''')
       print("Table created successfully\n")
 
-def add_password(cursor, conn):
-      s_app = input('Application: ')
-      s_email_user = input('Email/Username: ')
-      noVerify = True
-      while noVerify:
-            s_password = input('Password: ')
-            s_password2 = input('Verify Password: ')
-            if s_password == s_password2:
-                        noVerify = False
-            else:
-                  print("Your passwords did not match. Please try again.\n")
 
-      cursor.execute("""
-            INSERT INTO PASSWORDS (APPLICATION,EMAIL_USERNAME,PASSWORD) \
-            VALUES (?,?,?) \
-            """, (s_app, s_email_user, s_password))
+# Need to add the attaching to databse here which probably needs
+# to be initialized upon the client starting up
+def add_password(cursor, conn, application, username, password) -> bool:
+      try:
+            cursor.execute("""
+                  INSERT INTO PASSWORDS (APPLICATION,EMAIL_USERNAME,PASSWORD) \
+                  VALUES (?,?,?) \
+                  """, (application, username, password))
+            conn.commit()
+            print("Records created successfully")
+            return True
 
-      conn.commit()
-      print("Records created successfully")
+      except:
+            return False
 
-def edit_information(cursor,conn):
-      appExists = True
-      while appExists:
-            s_app = input('What applications information would you like to change? ')
-            cursor.execute(""" SELECT EXISTS (SELECT APPLICATION FROM PASSWORDS WHERE APPLICATION = ?) """, (s_app,))
-            if(cursor.fetchone()[0]):
-                  appExists = False
-            else:
-                  print("This application was not in our records. Please try again.\n")
-      correct_input = True
-      while correct_input:
-            s_changing = input('Would you like to change the email/username or password(Type "email/username" or "password")?\n')
-            s_password_change = "password"
-            s_email_user_change = "email/username"
-            if s_changing == s_password_change or s_changing == s_email_user_change:
-                  correct_input = False
-            else:
-                  print("Your input did not match 'email/username' or 'password'. Please try again.\n")
-      noVerify = True
-      while noVerify:
-            if s_changing == s_password_change:
-                  s_password = input('New Password: ')
-                  s_password2 = input('Verify New Password: ')
-                  if s_password == s_password2:
-                        noVerify = False
-                        cursor.execute("""
-                              UPDATE PASSWORDS \
+def edit_information(cursor, conn, application, type, value) -> bool:
+      appFound = False
+      #while appExists:
+      cursor.execute(""" SELECT EXISTS (SELECT APPLICATION FROM PASSWORDS WHERE APPLICATION = ?) """, (application,))
+      if(cursor.fetchone()[0]):
+            appFound = True
+            #return True
+      else:
+            appFound= False
+            #print("This application was not in our records. Please try again.\n")
+      #correct_input = True
+      if appFound:
+            #s_changing = input('Would you like to change the email/username or password(Type "email/username" or "password")?\n')
+            if type == "password":
+
+            #s_email_user_change = "email/username"
+            #if s_changing == s_password_change or s_changing == s_email_user_change:
+             #     correct_input = False
+           # else:
+            #      print("Your input did not match 'email/username' or 'password'. Please try again.\n")
+      #noVerify = True
+      #while noVerify:
+          #  if s_changing == s_password_change:
+           #       s_password = input('New Password: ')
+            #      s_password2 = input('Verify New Password: ')
+             #     if s_password == s_password2:
+              #          noVerify = False
+                  cursor.execute("""UPDATE PASSWORDS \
                               SET PASSWORD = ? \
                               WHERE APPLICATION = ?
-                              """, (s_password, s_app))
-                  else:
-                        print("Your new passwords did not match. Please try again.\n")            
-            if s_changing == s_email_user_change:
-                  s_email_user = input('New Email/Username: ')
-                  s_email_user2 = input('Verify New Email/Username: ')
-                  if s_email_user == s_email_user2:
-                        noVerify = False
-                        cursor.execute("""
-                              UPDATE PASSWORDS \
+                              """, (value, application))
+            else:
+                        #print("Your new passwords did not match. Please try again.\n")            
+            #if s_changing == s_email_user_change:
+                  #s_email_user = input('New Email/Username: ')
+                  #s_email_user2 = input('Verify New Email/Username: ')
+                  #if s_email_user == s_email_user2:
+                  #      noVerify = False
+                  cursor.execute(""" UPDATE PASSWORDS \
                               SET EMAIL_USERNAME = ? \
                               WHERE APPLICATION = ?
-                              """, (s_email_user, s_app))
-                  else:
-                        print("Your new email/usernames did not match. Please try again.\n")
-            
-                  
-      conn.commit()
-      print("Records successfully edited")
+                              """, (value, application))
+                  #else:
+                   #     print("Your new email/usernames did not match. Please try again.\n")
+            conn.commit()
+            print("Records successfully edited")
+            return True
+      else:
+            return False
+
       
 def delete_information(cursor, conn):
       noVerify = True

@@ -26,7 +26,7 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
     # Trigger authentication sequence upon successful connection to client
     start_authentication(conn)
     while True:
-        data = conn.recv(1024).decode()
+        #data = conn.recv(1024).decode()
         #if str(data) == "menu":
             # run start authentication from GUI
          #   start_authentication(conn)
