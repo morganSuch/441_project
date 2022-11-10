@@ -18,7 +18,7 @@ scanner = adafruit_fingerprint.Adafruit_Fingerprint(uart)
 def findFinger() -> bool:
     count = 0
     # Let user try authentication 3 times
-    if (count < MAX_FAILED_ATTEMPTS):
+    while (count < MAX_FAILED_ATTEMPTS):
         scanner.set_led(color=3, mode=3) # Sets led to purple
         while scanner.get_image() != adafruit_fingerprint.OK:
             pass
@@ -26,17 +26,16 @@ def findFinger() -> bool:
             scanner.set_led(color=1, mode=2)
             print("An error occurred")
 
-        if scanner.finger_search() != adafruit_fingerprint.OK:
+        elif scanner.finger_search() != adafruit_fingerprint.OK:
             scanner.set_led(color=1, mode=3)
             print("Finger not found")
             count +=1
-        
-        scanner.set_led(color=2, mode=3)
-        print("Finger found")
-        return True
+        else:
+            scanner.set_led(color=2, mode=3)
+            print("Finger found")
+            return True
     # If they fail after 3 let server know authnetication has failed
-    else:
-        return False
+    return False
 
 
 def addFinger(location) -> bool:
