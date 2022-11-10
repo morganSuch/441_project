@@ -111,6 +111,20 @@ def delete_information(cursor, conn):
       conn.commit()
       print("Records successfully deleted\n")  
 
+def applicationNames(cursor, conn):
+      cursor.execute("""
+      SELECT APPLICATION
+      FROM PASSWORDS """)
+      
+      applicationNamesColumn = cursor.fetchall()
+      
+      listAppNames = []
+      
+      for x in applicationNamesColumn:
+            listAppNames.append(x)
+      
+      return listAppNames
+      
 def convertToBinaryData(filename):
       #converts the file to binary format
       with open(filename, 'rb') as file:
