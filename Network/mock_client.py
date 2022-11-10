@@ -23,8 +23,8 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         # Server requests authentication from client 
         data = s.recv(1024).decode()
         if str(data) == "authorize":
-            #authenticated = findFinger()
-            authenticated = testAuth()
+            authenticated = findFinger()
+            #authenticated = testAuth()
             if authenticated:
                 s.send("yes".encode())
             # This will be the failed response after 3 attempts
@@ -35,13 +35,14 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             application = str(s.recv(1024).decode())
             username = str(s.recv(1024).decode())
             password = str(s.recv(1024).decode())
-
+            s.send("received".encode())
             # Encryption function should be added here!!!
-            database = connect_database(DATABASE)
-            cursor = database.cursor()
-            if (add_password(cursor, database, application, username, password)):
-                close_connection(database)
-                s.send("added".encode())
+            if s.recv(1024).decode() == "update":
+                database = connect_database(DATABASE)
+                cursor = database.cursor()
+                if (add_password(cursor, database, application, username, password)):
+                    close_connection(database)
+                    s.send("added".encode())
         if str(data) == "edit":
             s.send("editing".encode())
             application = str(s.recv(1024).decode())

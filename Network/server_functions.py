@@ -17,7 +17,8 @@ def send_password(fields, conn) -> bool:
     if str(ack0) == "adding":
         for field in fields:
             conn.send(field.encode())
-
+    if str(conn.recv(1024).decode()) == "received":
+        conn.send("update".encode())
     response = str(conn.recv(1024).decode())
     if str(response) == "added":
         print("Password added.")
