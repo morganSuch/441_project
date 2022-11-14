@@ -4,8 +4,8 @@ import hashlib
 import os
 import struct
 
-password = "k@(HDFn20-fn_TRJDM_#(*mafsa"
-key = hashlib.sha256(password).digest()
+password = "1234" # Password will be changed to something more complicated
+key = hashlib.sha256(password.encode('utf-8')).digest()
 chunksize = 64*1024
 in_db = "test.db.enc"
 out_db = "test.db"
