@@ -124,6 +124,28 @@ def applicationNames(cursor, conn):
             listAppNames.append(x)
       
       return listAppNames
+
+def getEmailUsername(cursor, conn, appName):
+      cursor.execute("""
+      SELECT EMAIL_USERNAME
+      FROM PASSWORDS
+      WHERE APPLICATION = ?
+      """, (appName,))
+      
+      emailUser = cursor.fetchone()
+      
+      return emailUser
+      
+def getPassword(cursor, conn, appName):
+      cursor.execute("""
+      SELECT PASSWORD
+      FROM PASSWORDS
+      WHERE APPLICATION = ?
+      """, (appName,))
+      
+      userPassword = cursor.fetchone()
+      
+      return userPassword      
       
 def convertToBinaryData(filename):
       #converts the file to binary format
