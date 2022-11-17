@@ -14,7 +14,7 @@ def add_new_face(id):
 
     image = face_recognition.load_image_file(file_name)
     image_encoding = face_recognition.face_encodings(file_name)[0]
-    image_file = open("C:\Users\suchm\cs_labs\441_project\Authentication"+id+".txt", "w")
+    image_file = open("/home/pi/"+id+".txt", "w")
     image_file.writelines(image_encoding)
     image_file.close()
     #image_list.append(image_encoding)
@@ -25,13 +25,12 @@ def add_new_face(id):
     # known_face_names = [
     #     "id"
     # ]
-    image_list = os.listdir("C:\Users\suchm\cs_labs\441_project\Authentication")
 
-def capture_face(image_list):
+def capture_face() -> bool:
     camera = PiCamera()
     camera.start_preview()
     sleep(5)
-    file_name ="authorize.jpg"
+    #file_name ="authorize.jpg"
     camera.capture("authorize.jpg") # Face to be recognized
     camera.stop_preview()
     # Load an image with an unknown face
@@ -41,6 +40,7 @@ def capture_face(image_list):
     face_locations = face_recognition.face_locations(authorization_image)
     face_encodings = face_recognition.face_encodings(authorization_image, face_locations)
 
+    image_list = os.listdir("/home/pi/")
     # Loop through each face found in the unknown image
     for (top, right, bottom, left), face_encoding in zip(face_locations, face_encodings):
         # See if the face is a match for the known face(s)
@@ -58,3 +58,13 @@ def capture_face(image_list):
         best_match_index = np.argmin(face_distances)
         if matches[best_match_index]:
             name = image_list[best_match_index]
+            print("match found")
+            return True
+        else:
+            print("match not found")
+            return False
+
+add_new_face("morgan")
+capture_face()
+
+
