@@ -45,6 +45,7 @@ def vaultScreen(root, conn):
     password_names= fetch_application_names(conn)
 
     count = 1
+    #add buttons in center of window for password retrieval and applications
     for name in password_names:
         print(name)
         pass_text = "pass"+name
@@ -52,7 +53,7 @@ def vaultScreen(root, conn):
         app_name = "app"+name
         pass_text = Text(window, height=1, borderwidth=5, width= 15, font=20)
         app_name = Button(window, text= name ,font= 15,  height=1, width=15, command=lambda name =name: copy_click(pass_text, hide_button, button_dict, name, conn))
-        app_name.grid(column=0, row=count)
+        app_name.grid(column=3, row=count)
         hide_button = Button(window, text="Hide",font= 15, command=lambda pass_text = pass_text, name = name, hide_button = hide_button: hide_password(hide_button, window, pass_text, name, button_dict))
         #show_button = Button(window, text="Show",font= 15, command=lambda pass_text = pass_text, name = name, show_button = show_button: show_password(show_button, window, pass_text, name, button_dict))
         button_dict[name] = count
@@ -70,7 +71,7 @@ def copy_click(new_output, hide, dict, name, conn):
     print("secret: ", secret)
     hide.grid(column=5, row=grid_val)
     new_output.insert(0.0, secret)
-    new_output.grid(column=3, row=grid_val)
+    new_output.grid(column=4, row=grid_val)
     new_output.configure(state='disabled')
     
 
