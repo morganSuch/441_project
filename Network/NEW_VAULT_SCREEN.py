@@ -55,10 +55,3 @@ def hide_password(hide_button, window, password, name, dict):
     password.insert(0.0, "***************")
     password.config(state='disabled')
     
-"""def show_password(show_button, window, password, name, dict):
-    grid_val = dict[name]
-    secret = fetch_password(conn, name)
-    password.config(state='normal')
-    password.delete(0.0 tk.END)
-    password.insert(0.0, secret)
-    password.config(state='disabled')"""
