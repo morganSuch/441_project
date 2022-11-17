@@ -26,7 +26,8 @@ def vaultScreen(root, conn):
         pass_text = Text(window, height=1, borderwidth=5, width= 15, font=20)
         app_name = Button(window, text= name ,font= 15,  height=1, width=15, command=lambda name =name: copy_click(pass_text, hide_button, button_dict, name, conn))
         app_name.grid(column=0, row=count)
-        hide_button = Button(window, text="hide",font= 15, command=lambda pass_text = pass_text, name = name, hide_button = hide_button: hide_password(hide_button, window, pass_text, name, button_dict))
+        hide_button = Button(window, text="Hide",font= 15, command=lambda pass_text = pass_text, name = name, hide_button = hide_button: hide_password(hide_button, window, pass_text, name, button_dict))
+        #show_button = Button(window, text="Show",font= 15, command=lambda pass_text = pass_text, name = name, show_button = show_button: show_password(show_button, window, pass_text, name, button_dict))
         button_dict[name] = count
         count += 1
     
@@ -53,3 +54,11 @@ def hide_password(hide_button, window, password, name, dict):
     password.delete(0.0, tk.END)
     password.insert(0.0, "***************")
     password.config(state='disabled')
+    
+"""def show_password(show_button, window, password, name, dict):
+    grid_val = dict[name]
+    secret = fetch_password(conn, name)
+    password.config(state='normal')
+    password.delete(0.0 tk.END)
+    password.insert(0.0, secret)
+    password.config(state='disabled')"""
