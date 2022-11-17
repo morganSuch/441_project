@@ -15,6 +15,7 @@
 def testAuth() -> bool:
     return True
 
+<<<<<<< Updated upstream
 # def findFinger() -> bool:
 #     count = 0
 #     # Let user try authentication 3 times
@@ -25,6 +26,19 @@ def testAuth() -> bool:
 #         if scanner.image_2_tz(1) != adafruit_fingerprint.OK:
 #             scanner.set_led(color=1, mode=2)
 #             print("An error occurred")
+=======
+def findFinger() -> bool:
+    #return True # FOR TESTING ONLY
+    count = 0
+    # Let user try authentication 3 times
+    while (count < MAX_FAILED_ATTEMPTS):
+        scanner.set_led(color=3, mode=3) # Sets led to purple
+        while scanner.get_image() != adafruit_fingerprint.OK:
+            pass
+        if scanner.image_2_tz(1) != adafruit_fingerprint.OK:
+            scanner.set_led(color=1, mode=2)
+            print("An error occurred")
+>>>>>>> Stashed changes
 
 #         elif scanner.finger_search() != adafruit_fingerprint.OK:
 #             scanner.set_led(color=1, mode=3)

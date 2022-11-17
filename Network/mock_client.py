@@ -5,18 +5,20 @@ from finger_functions import *
 from database import *
 from recognizeFace import *
 
-HOST = socket.gethostname()
-#HOST = "169.254.177.83"  # The server's hostname or IP address
+#HOST = socket.gethostname()
+HOST = "192.168.2.108"  # The server's hostname or IP address
 PORT = 65432  # The port used by the server
 DATABASE = "test.db"
 
 # create socket object
 print("Starting Client")
+
 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
     # connect to server
-    print("Connecting to server...")
+    
     try:
         s.connect((HOST, PORT))
+        print("Connecting to server...")
     except:
         print("connection failed")
     while (1):
@@ -30,6 +32,7 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             # This will be the failed response after 3 attempts
             else:
                 s.send("no".encode())
+<<<<<<< Updated upstream
 
         if str(data) == "authorize_face":
             # first we need to get all the faces from database
@@ -54,19 +57,29 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             close_connection(database)
         
         if str(data) == "add":
+=======
+        elif str(data) == "add":
+>>>>>>> Stashed changes
             s.send("adding".encode())
-            application = str(s.recv(1024).decode())
-            username = str(s.recv(1024).decode())
-            password = str(s.recv(1024).decode())
-            s.send("received".encode())
+            fields = s.recv(4096)
+            fields = fields.decode()
+            fields = eval(fields)
+            
+            #application = str(s.recv(1024).decode())
+            application = fields[0]
+            #username = str(s.recv(1024).decode())
+            username = fields[1]
+            #password = str(s.recv(1024).decode())
+            password = fields[2]
+            #s.send("received".encode())
             # Encryption function should be added here!!!
-            if s.recv(1024).decode() == "update":
-                database = connect_database(DATABASE)
-                cursor = database.cursor()
-                if (add_password(cursor, database, application, username, password)):
-                    close_connection(database)
-                    s.send("added".encode())
-        if str(data) == "edit":
+            #if s.recv(1024).decode() == "update":
+            database = connect_database(DATABASE)
+            cursor = database.cursor()
+            if (add_password(cursor, database, application, username, password)):
+                close_connection(database)
+                s.send("added".encode())
+        elif str(data) == "edit":
             s.send("editing".encode())
             application = str(s.recv(1024).decode())
             type = str(s.recv(1024).decode())
