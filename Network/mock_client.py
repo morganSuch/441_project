@@ -3,6 +3,7 @@
 import socket
 from finger_functions import *
 from database import *
+from recognizeFace import *
 
 HOST = socket.gethostname()
 #HOST = "169.254.177.83"  # The server's hostname or IP address
@@ -19,17 +20,39 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
     except:
         print("connection failed")
     while (1):
-
         # Server requests authentication from client 
         data = s.recv(1024).decode()
-        if str(data) == "authorize":
-            authenticated = findFinger()
-            #authenticated = testAuth()
+        if str(data) == "authorize_finger":
+            #authenticated = findFinger()
+            authenticated = testAuth()
             if authenticated:
                 s.send("yes".encode())
             # This will be the failed response after 3 attempts
             else:
                 s.send("no".encode())
+
+        if str(data) == "authorize_face":
+            # first we need to get all the faces from database
+            database = connect_database(DATABASE)
+            cursor = database.cursor()
+            # Saving files to local file directory
+            get_images(cursor, database)
+            # Calling facial recognition program 
+            authenticated = authenticate_face("/home/faces/")
+
+            if authenticated:
+                s.send("yes".encode())
+            # This will be the failed response after 3 attempts
+            else:
+                s.send("no".encode())
+        if str(data) == "add_face":
+            image_id = str(s.recv(1024).decode())
+            new_image = capture_face(image_id)
+            database = connect_database(DATABASE)
+            cursor = database.cursor()
+            add_face(cursor, database, image_id, new_image)
+            close_connection(database)
+        
         if str(data) == "add":
             s.send("adding".encode())
             application = str(s.recv(1024).decode())
@@ -55,4 +78,19 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             if (edit_information(cursor, database, application, type, value)):
                 close_connection(database)
                 s.send("edited".encode())
+        if str(data) == "get_apps":
+            database = connect_database(DATABASE)
+            cursor = database.cursor()
+            app_list = str(get_application_names(cursor, database))
+            s.send(app_list.encode())
+        if str(data) == "get_pass":
+            application = str(s.recv(1024).decode())
+            database = connect_database(DATABASE)
+            cursor = database.cursor()
+            password = fetch_password(cursor, database, application)
+            close_connection(database)
+            password = password[0]
+            print(password)
+            s.send(password.encode())
+            
     s.close()

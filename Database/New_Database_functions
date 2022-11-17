@@ -18,11 +18,9 @@ def create_databse(cursor):
       
       print("Passwords Table created successfully.\n")
       
-      cursor.execute('''CREATE TABLE FACIALREC
-            (NAMEID     INT   IDENTITY    PRIMARY KEY NOT NULL,
-            FULL_NAME               NVARCHAR(50)      NOT NULL,
-            PICFILENAME             NVARCHAR(100),
-            IMAGE_ID                BLOB);''')
+      cursor.execute('''CREATE TABLE FACES
+            (IMAGE_ID     INT   IDENTITY    PRIMARY KEY NOT NULL,
+            IMAGE                BLOB);''')
       
       print("Facial Recognition Table created successfully.\n")
 
@@ -111,6 +109,42 @@ def delete_information(cursor, conn):
       conn.commit()
       print("Records successfully deleted\n")  
 
+def applicationNames(cursor, conn):
+      cursor.execute("""
+      SELECT APPLICATION
+      FROM PASSWORDS """)
+      
+      applicationNamesColumn = cursor.fetchall()
+      
+      listAppNames = []
+      
+      for x in applicationNamesColumn:
+            listAppNames.append(x)
+      
+      return listAppNames
+
+def getEmailUsername(cursor, conn, appName):
+      cursor.execute("""
+      SELECT EMAIL_USERNAME
+      FROM PASSWORDS
+      WHERE APPLICATION = ?
+      """, (appName,))
+      
+      emailUser = cursor.fetchone()
+      
+      return emailUser
+      
+def getPassword(cursor, conn, appName):
+      cursor.execute("""
+      SELECT PASSWORD
+      FROM PASSWORDS
+      WHERE APPLICATION = ?
+      """, (appName,))
+      
+      userPassword = cursor.fetchone()
+      
+      return userPassword      
+      
 def convertToBinaryData(filename):
       #converts the file to binary format
       with open(filename, 'rb') as file:
