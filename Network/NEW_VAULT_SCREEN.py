@@ -11,10 +11,37 @@ button_dict = {}
 
 def vaultScreen(root, conn):
     window = Toplevel(root)
-    window.geometry('500x500')
+    window.geometry('900x900')
     window.title("Password Manager")
+    
+    #Color different sections of the menu
+    password_modifiers_background = Label(window, bg="green")
+    password_modifiers_background.grid(row=0,column=0,rowspan=9,columnspan=3)
+    
+    vault_background = Label(window, bg="red")
+    vault_background.grid(row=0,column=3,rowspan=9,columnspan=3)
+    
+    additional_settings_background = Label(window, bg="blue")
+    additional_settings_background.grid(row=0,column=6,rowspan=9,columnspan=3)
+    
     page_title = Label(window, text="VAULT", font=("Courier bold", 50))
-    page_title.grid(column=1, row=0)
+    page_title.grid(column=4, row=0)
+    
+    #add buttons on left side of menu
+    add = Button(window, text="ADD PASSWORD",font=("Courier bold", 20), bg = "white", fg ="blue",height=1, width=20,command=lambda: add_pass(root, conn))
+    add.grid(column=1, row=2)
+
+    delete = Button(window, text="DELETE PASSWORD",font=("Courier bold", 20), bg = "white",fg ="blue",height=1, width=20, command=lambda: delete_pass(root, conn))
+    delete.grid(column=1, row=3)
+
+    modify = Button(window, text="MODIFY PASSWORD",font=("Courier bold", 20),bg = "white", fg ="blue", height=1, width=20,command=lambda: modify_pass(root, conn))
+    modify.grid(column=1, row=4)
+
+    settings = Button(window, text="USER SETTINGS",font=("Courier bold", 20),bg = "white", fg ="blue", height=1, width=20,command=lambda: show_settings(root, conn))
+    settings.grid(column=1, row=5)
+    
+    #this is for once we have a function to generate a password for the user
+    #create_password = Button(window, text="PASSWORD CREATOR", font=("Courier bold", 20), bg="white", fg="blue", height=1, width=2-,command=lambda: password_creation(root,conn))
     password_names= fetch_application_names(conn)
 
     count = 1
@@ -31,7 +58,7 @@ def vaultScreen(root, conn):
         button_dict[name] = count
         count += 1
     
-    window.geometry('500x500')
+    
     window.mainloop()
 
 # function for showing password
@@ -41,9 +68,9 @@ def copy_click(new_output, hide, dict, name, conn):
     new_output.config(state='normal')
     new_output.delete(0.0, tk.END)
     print("secret: ", secret)
-    hide.grid(column=3, row=grid_val)
+    hide.grid(column=5, row=grid_val)
     new_output.insert(0.0, secret)
-    new_output.grid(column=1, row=grid_val)
+    new_output.grid(column=3, row=grid_val)
     new_output.configure(state='disabled')
     
 
