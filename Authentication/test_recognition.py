@@ -1,88 +1,60 @@
 import face_recognition
-from PIL import Image, ImageDraw
 import numpy as np
 from picamera import PiCamera
 from time import sleep
+import os
 
-camera = PiCamera()
+def add_new_face(id):
+    camera = PiCamera()
+    camera.start_preview()
+    sleep(5)
+    file_name = id+".jpg"
+    camera.capture(file_name) # Face to be recognized
+    camera.stop_preview()
 
-camera.start_preview()
-sleep(5)
-camera.capture("matthew.jpg")
-camera.stop_preview()
+    image = face_recognition.load_image_file(file_name)
+    image_encoding = face_recognition.face_encodings(file_name)[0]
+    image_file = open("C:\Users\suchm\cs_labs\441_project\Authentication"+id+".txt", "w")
+    image_file.writelines(image_encoding)
+    image_file.close()
+    #image_list.append(image_encoding)
+    # Create arrays of known face encodings and their names
+    # known_face_encodings = [
+    #     image_encoding,
+    # ]
+    # known_face_names = [
+    #     "id"
+    # ]
+    image_list = os.listdir("C:\Users\suchm\cs_labs\441_project\Authentication")
 
-camera.start_preview()
-sleep(5)
-camera.capture("morgan.jpg")
-camera.stop_preview()
+def capture_face(image_list):
+    camera = PiCamera()
+    camera.start_preview()
+    sleep(5)
+    file_name ="authorize.jpg"
+    camera.capture("authorize.jpg") # Face to be recognized
+    camera.stop_preview()
+    # Load an image with an unknown face
+    authorization_image = face_recognition.load_image_file("authorize.jpg")
 
-camera.start_preview()
-sleep(5)
-camera.capture("test-photo.jpg")
-camera.stop_preview()
-# This is an example of running face recognition on a single image
-# and drawing a box around each person that was identified.
+    # Find all the faces and face encodings in the unknown image
+    face_locations = face_recognition.face_locations(authorization_image)
+    face_encodings = face_recognition.face_encodings(authorization_image, face_locations)
 
-# Load a sample picture and learn how to recognize it.
-obama_image = face_recognition.load_image_file("matthew.jpg")
-obama_face_encoding = face_recognition.face_encodings(obama_image)[0]
+    # Loop through each face found in the unknown image
+    for (top, right, bottom, left), face_encoding in zip(face_locations, face_encodings):
+        # See if the face is a match for the known face(s)
+        matches = face_recognition.compare_faces(image_list, face_encoding)
 
-# Load a second sample picture and learn how to recognize it.
-biden_image = face_recognition.load_image_file("morgan.jpg")
-biden_face_encoding = face_recognition.face_encodings(biden_image)[0]
+        name = "Unknown"
 
-# Create arrays of known face encodings and their names
-known_face_encodings = [
-    obama_face_encoding,
-    biden_face_encoding
-]
-known_face_names = [
-    "Matthew",
-    "Morgan"
-]
+        # If a match was found in known_face_encodings, just use the first one.
+        # if True in matches:
+        #     first_match_index = matches.index(True)
+        #     name = known_face_names[first_match_index]
 
-# Load an image with an unknown face
-unknown_image = face_recognition.load_image_file("test-photo.jpg")
-
-# Find all the faces and face encodings in the unknown image
-face_locations = face_recognition.face_locations(unknown_image)
-face_encodings = face_recognition.face_encodings(unknown_image, face_locations)
-
-# Convert the image to a PIL-format image so that we can draw on top of it with the Pillow library
-# See http://pillow.readthedocs.io/ for more about PIL/Pillow
-pil_image = Image.fromarray(unknown_image)
-# Create a Pillow ImageDraw Draw instance to draw with
-draw = ImageDraw.Draw(pil_image)
-
-# Loop through each face found in the unknown image
-for (top, right, bottom, left), face_encoding in zip(face_locations, face_encodings):
-    # See if the face is a match for the known face(s)
-    matches = face_recognition.compare_faces(known_face_encodings, face_encoding)
-
-    name = "Unknown"
-
-    # If a match was found in known_face_encodings, just use the first one.
-    # if True in matches:
-    #     first_match_index = matches.index(True)
-    #     name = known_face_names[first_match_index]
-
-    # Or instead, use the known face with the smallest distance to the new face
-    face_distances = face_recognition.face_distance(known_face_encodings, face_encoding)
-    best_match_index = np.argmin(face_distances)
-    if matches[best_match_index]:
-        name = known_face_names[best_match_index]
-
-    # Draw a box around the face using the Pillow module
-    draw.rectangle(((left, top), (right, bottom)), outline=(0, 0, 255))
-
-    # Draw a label with a name below the face
-    text_width, text_height = draw.textsize(name)
-    draw.rectangle(((left, bottom - text_height - 10), (right, bottom)), fill=(0, 0, 255), outline=(0, 0, 255))
-    draw.text((left + 6, bottom - text_height - 5), name, fill=(255, 255, 255, 255))
-
-
-# Remove the drawing library from memory as per the Pillow docs
-del draw
-
-# Display the resulting image
-pil_image.show()
+        # Or instead, use the known face with the smallest distance to the new face
+        face_distances = face_recognition.face_distance(image_list, face_encoding)
+        best_match_index = np.argmin(face_distances)
+        if matches[best_match_index]:
+            name = image_list[best_match_index]

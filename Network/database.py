@@ -15,6 +15,12 @@ def create_databse(cursor):
             PASSWORD    CHAR(50));''')
       print("Table created successfully\n")
 
+      cursor.execute('''CREATE TABLE FACES
+      (IMAGE_ID     INT   IDENTITY    PRIMARY KEY NOT NULL,
+      IMAGE                BLOB);''')
+      
+      print("Facial Recognition Table created successfully.\n")
+
 
 # Need to add the attaching to databse here which probably needs
 # to be initialized upon the client starting up
@@ -33,48 +39,22 @@ def add_password(cursor, conn, application, username, password) -> bool:
 
 def edit_information(cursor, conn, application, type, value) -> bool:
       appFound = False
-      #while appExists:
       cursor.execute(""" SELECT EXISTS (SELECT APPLICATION FROM PASSWORDS WHERE APPLICATION = ?) """, (application,))
       if(cursor.fetchone()[0]):
             appFound = True
-            #return True
       else:
             appFound= False
-            #print("This application was not in our records. Please try again.\n")
-      #correct_input = True
       if appFound:
-            #s_changing = input('Would you like to change the email/username or password(Type "email/username" or "password")?\n')
             if type == "password":
-
-            #s_email_user_change = "email/username"
-            #if s_changing == s_password_change or s_changing == s_email_user_change:
-             #     correct_input = False
-           # else:
-            #      print("Your input did not match 'email/username' or 'password'. Please try again.\n")
-      #noVerify = True
-      #while noVerify:
-          #  if s_changing == s_password_change:
-           #       s_password = input('New Password: ')
-            #      s_password2 = input('Verify New Password: ')
-             #     if s_password == s_password2:
-              #          noVerify = False
                   cursor.execute("""UPDATE PASSWORDS \
                               SET PASSWORD = ? \
                               WHERE APPLICATION = ?
                               """, (value, application))
             else:
-                        #print("Your new passwords did not match. Please try again.\n")            
-            #if s_changing == s_email_user_change:
-                  #s_email_user = input('New Email/Username: ')
-                  #s_email_user2 = input('Verify New Email/Username: ')
-                  #if s_email_user == s_email_user2:
-                  #      noVerify = False
                   cursor.execute(""" UPDATE PASSWORDS \
                               SET EMAIL_USERNAME = ? \
                               WHERE APPLICATION = ?
                               """, (value, application))
-                  #else:
-                   #     print("Your new email/usernames did not match. Please try again.\n")
             conn.commit()
             print("Records successfully edited")
             return True
@@ -98,41 +78,74 @@ def delete_information(cursor, conn):
       conn.commit()
       print("Records successfully deleted\n")     
 
+def get_application_names(cursor, conn) -> list:
+      cursor.execute("""
+      SELECT APPLICATION
+      FROM PASSWORDS """)
+      
+      applicationNamesColumn = cursor.fetchall()
+      listAppNames = []
+      
+      for x in applicationNamesColumn:
+            listAppNames.append(x[0])      
+      return listAppNames
+
+def fetch_password(cursor, conn, appName):
+      cursor.execute("""
+      SELECT PASSWORD
+      FROM PASSWORDS
+      WHERE APPLICATION = ?
+      """, (appName,))
+      
+      userPassword = cursor.fetchone()
+      return userPassword  
+
+# Face recognition functions
+def convert_to_binary(file):
+      #converts the file to binary format
+      with open(file, 'rb') as file:
+            blobData = file.read()
+      return blobData
+
+def write_to_file(blob, file):
+      with open(file, 'wb') as file:
+            file.write(blob)
+      print("Stored blob data into: ", file)
+
+
+def add_face(cursor, conn, id, photo):
+      image = convert_to_binary(photo)
+      #personName = input('Who is this image authenticating? Please enter full name. ')
+      #picFileName = input('What would you like this image name saved as? ')
+
+      cursor.execute("""
+            INSERT INTO FACIALREC (IMAGEID, IMAGE) \
+            VALUE (?,?) \
+            """, (id, image))
+      conn.commit()
+      print("Records created successfully")
+
+def get_images(cursor, conn) -> list:
+      cursor.execute("""
+      SELECT IMAGE
+      FROM FACES """)
+      
+      images = cursor.fetchall()
+      image_list = []
+      
+      for x in images:
+            image_id = x[0]
+            image = x[1]
+            #image_list.append(x[0])
+            print("transferring data to disk")
+            image_path = "home/faces"+image_id+".jpg"
+            write_to_file(image, image_path)
+            print("successfully written to disk")
+      # return image_list
+
 def close_connection(conn):
       #closes SQLite connection
       if (conn):
             conn.close()
 
 
-# while(True):
-#       print("DATABASE MENU\n")
-#       print("1    Create a new database\n")
-#       print("2    Add records to a database\n")
-#       print("3    Edit records in database\n")
-#       print("4    Delete records in database\n")
-
-#       menu_option = input("Please enter a menu option: ")
-#       if (menu_option == "1"):
-#             name = input("Enter a name for the new database: ")
-#             database = connect_database(name)
-#             cursor = database.cursor()
-#             create_databse(cursor)
-#             close_connection(database)
-#       if (menu_option == "2"):
-#             name = input("Enter a name for the new database: ")
-#             database = connect_database(name)
-#             cursor = database.cursor()
-#             add_password(cursor, database)
-#             close_connection(database)
-#       if(menu_option == "3"):
-#             name = input("Enter a name for the new database: ")
-#             database = connect_database(name)
-#             cursor = database.cursor()
-#             edit_information(cursor, database)
-#             close_connection(database)
-#       if(menu_option == "4"):
-#             name = input("Enter a name for the new database: ")
-#             database = connect_database(name)
-#             cursor = database.cursor()
-#             delete_information(cursor, database)
-#             close_connection(database)
