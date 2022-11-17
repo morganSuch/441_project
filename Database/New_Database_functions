@@ -18,11 +18,9 @@ def create_databse(cursor):
       
       print("Passwords Table created successfully.\n")
       
-      cursor.execute('''CREATE TABLE FACIALREC
-            (NAMEID     INT   IDENTITY    PRIMARY KEY NOT NULL,
-            FULL_NAME               NVARCHAR(50)      NOT NULL,
-            PICFILENAME             NVARCHAR(100),
-            IMAGE_ID                BLOB);''')
+      cursor.execute('''CREATE TABLE FACES
+            (IMAGE_ID     INT   IDENTITY    PRIMARY KEY NOT NULL,
+            IMAGE                BLOB);''')
       
       print("Facial Recognition Table created successfully.\n")
 
