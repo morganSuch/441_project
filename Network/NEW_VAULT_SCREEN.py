@@ -40,8 +40,10 @@ def vaultScreen(root, conn):
     settings = Button(window, text="USER SETTINGS",font=("Courier bold", 20),bg = "white", fg ="blue", height=1, width=20,command=lambda: show_settings(root, conn))
     settings.grid(column=1, row=5)
     
-    #this is for once we have a function to generate a password for the user
-    #create_password = Button(window, text="PASSWORD CREATOR", font=("Courier bold", 20), bg="white", fg="blue", height=1, width=2-,command=lambda: password_creation(root,conn))
+    #functions on the right side
+    generate_password = Button(window, text="GENERATE PASSWORD", font=("Courier bold",20),bg="white",fg="blue",height=1,width=20)
+    generate_password.grid(column=7,row=2)
+    
     password_names= fetch_application_names(conn)
 
     count = 1
@@ -83,3 +85,10 @@ def hide_password(hide_button, window, password, name, dict):
     password.insert(0.0, "***************")
     password.config(state='disabled')
     
+"""def show_password(show_button, window, password, name, dict):
+    grid_val = dict[name]
+    secret = fetch_password(conn, name)
+    password.config(state='normal')
+    password.delete(0.0 tk.END)
+    password.insert(0.0, secret)
+    password.config(state='disabled')"""
