@@ -6,7 +6,7 @@ import os
 
 camera = PiCamera()
 
-def add_new_face(camera, id):
+def add_new_face(camera, id) -> bool:
     camera.start_preview()
     sleep(3)
     #file_name="morgan.jpg"
@@ -18,14 +18,14 @@ def add_new_face(camera, id):
     try:
         image_encoding = face_recognition.face_encodings(image)[0]
     except IndexError:
-        print("unable to find face")
-        quit()
+        print("Unable to find face")
+        return False
     """file_name = "/home/pi/password_manager/441_project/Authentication/Faces/"+id+".txt"
     image_file = open(file_name, "w")
     print(image_encoding)
     image_file.writelines(str(image_encoding))
     image_file.close()"""
-    return
+    return True
     #image_list.append(image_encoding)
     # Create arrays of known face encodings and their names
     # known_face_encodings = [
@@ -44,9 +44,13 @@ def capture_face(camera) -> bool:
     
     # Load an image with an unknown face
     authorization_image = face_recognition.load_image_file("authorize.jpg")
-
+    
     # Find all the faces and face encodings in the unknown image
-    auth_encode = face_recognition.face_encodings(authorization_image)[0]
+    try:
+        auth_encode = face_recognition.face_encodings(authorization_image)[0]
+    except IndexError:
+        print("Unable to find face")
+        return False
     known_encodings = []
     image_list = os.listdir("/home/pi/password_manager/441_project/Authentication/Faces/")
     for file in image_list:
@@ -68,3 +72,6 @@ def capture_face(camera) -> bool:
 
 add_new_face(camera, "morgan")
 capture_face(camera)
+
+
+
