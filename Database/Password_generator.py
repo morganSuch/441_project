@@ -21,3 +21,4 @@ def create_password:
           if (any(char in special_chars for char in password) and
               sum(char in digits for char in password)>=2):
                 break
+      return password
