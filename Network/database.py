@@ -62,21 +62,24 @@ def edit_information(cursor, conn, application, type, value) -> bool:
             return False
 
       
-def delete_information(cursor, conn):
-      noVerify = True
-      while noVerify:
-            s_delete = input('What application data would you like to delete? ')
-            cursor.execute(""" SELECT EXISTS (SELECT APPLICATION FROM PASSWORDS WHERE APPLICATION = ?) """, (s_delete,))
-            if(cursor.fetchone()[0]):
-                  cursor.execute("""
+def delete_information(cursor, conn, app):
+      appFound = False
+      cursor.execute(""" SELECT EXISTS (SELECT APPLICATION FROM PASSWORDS WHERE APPLICATION = ?) """, (app,))
+      if(cursor.fetchone()[0]):
+            appFound = True
+      else:
+            appFound = False
+      if appFound:
+            cursor.execute("""
                   DELETE FROM PASSWORDS
                   WHERE APPLICATION = ?
-                  """, (s_delete,))
-                  noVerify = False
-            else:
-                  print("This application was not in our records.\n")
-      conn.commit()
-      print("Records successfully deleted\n")     
+                  """, (app,))
+            conn.commit()
+            print("Records successfully deleted") 
+            return True
+      else:
+            return False
+          
 
 def get_application_names(cursor, conn) -> list:
       cursor.execute("""

@@ -2,20 +2,18 @@ import socket
 
 # triggers finger authentication 
 def send_finger_authenticate(conn) -> bool:
-    conn.send("authorize_finger".encode())
+    conn.send("authorize".encode())
     response = conn.recv(1024).decode()
     if str(response) == "yes":
-    # TODO try this out in lab to see if it works as expected
         return True
     else:
         return False
 
-# triggers finger authentication 
+# triggers face authentication 
 def send_face_authenticate(conn) -> bool:
     conn.send("authorize_face".encode())
     response = conn.recv(1024).decode()
     if str(response) == "yes":
-    # TODO try this out in lab to see if it works as expected
         return True
     else:
         return False
@@ -23,12 +21,8 @@ def send_face_authenticate(conn) -> bool:
 # Adds password to the database
 def send_password(fields, conn) -> bool:
     conn.send("add".encode())
-    ack0 = str(conn.recv(1024).decode())
-    if str(ack0) == "adding":
-        for field in fields:
-            conn.send(field.encode())
-    if str(conn.recv(1024).decode()) == "received":
-        conn.send("update".encode())
+    field_list = str(fields)
+    conn.send(field_list.encode())
     response = str(conn.recv(1024).decode())
     if str(response) == "added":
         print("Password added.")
@@ -54,8 +48,10 @@ def edit_password(fields, conn) -> bool:
         return False
 
 # removes password from the database
-def delete_password(conn) -> bool:
+def delete_password(fields, conn) -> bool:
     conn.send("delete".encode())
+    for field in fields:
+        conn.send(field.encode())
     response = conn.recv(1024).decode()
     if str(response) == "deleted":
         return True

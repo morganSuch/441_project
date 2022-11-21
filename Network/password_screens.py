@@ -38,8 +38,23 @@ def deleteScreen(root, conn):
     window.geometry('400x400')
     window.title("Delete Password")
 
+    fields = []
+
     page_title = Label(window, text="DELETE PASSWORD", font=("Courier bold", 20))
     page_title.grid(column=1, row=0)
+
+    # Identifier
+    id_tag = Label(window, text="Please enter the application name\n for the entry you wish to delete.", font=("Courier bold", 15))
+    id_tag.grid(column=1, row=2)
+
+    name_tag = Label(window, text="Application", font=("Courier bold", 15))
+    name_tag.grid(column=1, row=3)
+    id = Text(window, height=1, width=20)
+    id.grid(column=2, row=3)
+    
+    fields.append(id)
+    submit = Button(window, text="DELETE",font=("Courier bold", 20), bg = "red", fg ="white", height=1, width=10, command=lambda: get_input(fields, conn, "delete"))
+    submit.grid(column=2, row=4)
 
 def modifyScreen(root, conn):
     window = Toplevel(root)
@@ -112,25 +127,27 @@ def settings_screen(root, conn):
 # password strength and it might need its own class
 def get_input(fields, conn, function):
     input_list = []
-    # for i in range 2:# field in len(fields)-1:
-    #     input = field[i].get("1.0", "end-1c")
-    #     input_list.append(input)
-    #     print(input)
-    id = fields[0].get("1.0", "end-1c")
-    print("id ", id)
-    input_list.append(id)
+    for field in fields:
+        input = field.get("1.0", "end-1c")
+        input_list.append(input)
+        print(input)
+    # id = fields[0].get("1.0", "end-1c")
+    # print("id ", id)
+    # input_list.append(id)
     
-    print("choose ", fields[1])
-    input_list.append(fields[1])
+    # print("choose ", fields[1])
+    # input_list.append(fields[1])
     
-    value = fields[2].get("1.0", "end-1c")
-    print("value ", value)
-    input_list.append(value)
+    # value = fields[2].get("1.0", "end-1c")
+    # print("value ", value)
+    # input_list.append(value)
 
     if function == "add":
         send_password(input_list,conn)
     elif function == "edit":
         edit_password(input_list, conn)
+    elif function == "delete":
+        delete_password(input_list, conn)
 
 # def sendUpdatedAuth(conn, value):
 
