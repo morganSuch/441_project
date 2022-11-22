@@ -7,7 +7,7 @@ from database import *
 #from recognizeFace import *
 
 HOST = socket.gethostname()
-#HOST = "192.168.2.108"  # The server's hostname or IP address
+#HOST = "192.168.56.1"  # The server's hostname or IP address
 PORT = 65432  # The port used by the server
 DATABASE = "test.db"
 
