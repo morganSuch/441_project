@@ -10,16 +10,17 @@ def create_databse(cursor):
       cursor.execute("DROP TABLE IF EXISTS PASSWORDS")
 
       cursor.execute('''CREATE TABLE PASSWORDS
-            (APPLICATION      CARCHAR(255)    NOT NULL,
-            USERNAME    CHAR(50)        NOT NULL,
-            PASSWORD    CHAR(50));''')
+            (APPLICATION      VARCHAR(255)    NOT NULL,
+            USERNAME    VARCHAR(50)        NOT NULL,
+            PASSWORD    VARCHAR(50));''')
+      
       print("Table created successfully\n")
 
-      cursor.execute('''CREATE TABLE FACES
-      (IMAGE_ID     INT   IDENTITY    PRIMARY KEY NOT NULL,
-      IMAGE                BLOB);''')
+      cursor.execute('''CREATE TABLE SECURITY_QUESTION
+      (QUESTION   VARCHAR(500)      NOT NULL,
+      ANSWER      VARCHAR(50)       NOT NULL);''')
       
-      print("Facial Recognition Table created successfully.\n")
+      print("Security Question Table created successfully.\n")
 
 
 # Need to add the attaching to databse here which probably needs
