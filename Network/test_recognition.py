@@ -4,13 +4,13 @@ from picamera import PiCamera
 from time import sleep
 import os
 
-camera = PiCamera()
+#camera = PiCamera()
 
 def add_face(camera, id) -> bool:
     camera.start_preview()
     sleep(3)
     #file_name="morgan.jpg"
-    file_name = "Faces/" + id + ".jpg"
+    file_name = "/home/pi/Faces/" + id + ".jpg"
     camera.capture(file_name) # Face to be recognized
     camera.stop_preview()
 
@@ -19,6 +19,7 @@ def add_face(camera, id) -> bool:
         image_encoding = face_recognition.face_encodings(image)[0]
     except IndexError:
         print("Unable to find face")
+        os.remove(file_name)
         return False
     """file_name = "/home/pi/password_manager/441_project/Authentication/Faces/"+id+".txt"
     image_file = open(file_name, "w")
@@ -52,9 +53,9 @@ def authenticate_face(camera) -> bool:
         print("Unable to find face")
         return False
     known_encodings = []
-    image_list = os.listdir("/home/pi/password_manager/441_project/Authentication/Faces/")
+    image_list = os.listdir("/home/pi/Faces/")
     for file in image_list:
-        image = face_recognition.load_image_file("Faces/" + file)
+        image = face_recognition.load_image_file("/home/pi/Faces/" + file)
         print(file)
         encoding = face_recognition.face_encodings(image)[0]
         known_encodings.append(encoding)

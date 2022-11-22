@@ -2,12 +2,12 @@
 import socket
 from finger_functions import *
 from database import *
-#from test_recognition import *
-#camera = PiCamera()
+from test_recognition import *
+camera = PiCamera()
 #from recognizeFace import *
 
-HOST = socket.gethostname()
-#HOST = "192.168.56.1"  # The server's hostname or IP address
+#HOST = socket.gethostname()
+HOST = "169.254.177.83"  # The server's hostname or IP address
 PORT = 65432  # The port used by the server
 DATABASE = "test.db"
 
@@ -26,8 +26,8 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         # Server requests authentication from client 
         data = s.recv(1024).decode()
         if str(data) == "authorize":
-            #authenticated = findFinger()
-            authenticated = testAuth()
+            authenticated = findFinger()
+            # authenticated = testAuth()
             if authenticated:
                 s.send("yes".encode())
             # This will be the failed response after 3 attempts
@@ -42,26 +42,26 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             #get_images(cursor, database)
             # Calling facial recognition program 
             #authenticated = authenticate_face("/home/faces/")
-            #authenticate_face(camera)
-            authenticated = testAuth()
+            authenticated= authenticate_face(camera)
+            #authenticated = testAuth()
             if authenticated:
                 s.send("yes".encode())
             else:
                 s.send("no".encode())
         if str(data) == "add_face":
             image_id = str(s.recv(1024).decode())
-            #new_image = capture_face(camera, image_id)
+            new_image = add_face(camera, image_id)
 
             # Need something to add image to the face directory here
-            new_image = testAuth()
+            #new_image = testAuth()
             if new_image:
                 s.send("yes".encode())
             else:
                 s.send("no".encode())
 
         if str(data) == "add_finger":
-            added = testAuth2()
-            #added = add_finger()
+            #added = testAuth2()
+            added = addFinger(4)
             if added:
                 s.send("yes".encode())
             else:
