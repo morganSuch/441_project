@@ -138,24 +138,6 @@ def add_face(cursor, conn, id, photo):
       conn.commit()
       print("Records created successfully")
 
-def get_images(cursor, conn) -> list:
-      cursor.execute("""
-      SELECT IMAGE
-      FROM FACES """)
-      
-      images = cursor.fetchall()
-      image_list = []
-      
-      for x in images:
-            image_id = x[0]
-            image = x[1]
-            #image_list.append(x[0])
-            print("transferring data to disk")
-            image_path = "home/faces"+image_id+".jpg"
-            write_to_file(image, image_path)
-            print("successfully written to disk")
-      # return image_list
-
 def close_connection(conn):
       #closes SQLite connection
       if (conn):

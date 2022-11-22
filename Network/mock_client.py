@@ -1,8 +1,9 @@
 # echo-client.py
-
 import socket
 from finger_functions import *
 from database import *
+#from test_recognition import *
+#camera = PiCamera()
 #from recognizeFace import *
 
 HOST = socket.gethostname()
@@ -41,7 +42,7 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             #get_images(cursor, database)
             # Calling facial recognition program 
             #authenticated = authenticate_face("/home/faces/")
-            #authenticate_face(face_dir, image)
+            #authenticate_face(camera)
             authenticated = testAuth()
             if authenticated:
                 s.send("yes".encode())
@@ -49,10 +50,9 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
                 s.send("no".encode())
         if str(data) == "add_face":
             image_id = str(s.recv(1024).decode())
-            #new_image = capture_face(image_id)
+            #new_image = capture_face(camera, image_id)
 
             # Need something to add image to the face directory here
-
             new_image = testAuth()
             if new_image:
                 s.send("yes".encode())

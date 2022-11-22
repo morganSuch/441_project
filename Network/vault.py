@@ -57,6 +57,9 @@ def vaultScreen(root, conn):
 
     gen = Button(window, text="LOGOUT",font=("Courier bold", 12), bg = "white", fg ="black",height=1, width=20,command=lambda window=window: hide_screen(window))
     gen.grid(column=0, row=11)
+
+    gen1 = Button(window, text="LOGOUT",font=("Courier bold", 12), bg = "white", fg ="black",height=1, width=20,command=lambda window=window: hide_screen(window))
+    gen1.grid(column=6, row=1, padx=100)
     
     # MIDDLE COLUMN
     count = 1

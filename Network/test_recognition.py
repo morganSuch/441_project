@@ -35,7 +35,7 @@ def add_face(camera, id) -> bool:
     #     "id"
     # ]
 
-def capture_face(camera) -> bool:
+def authenticate_face(camera) -> bool:
     camera.start_preview()
     sleep(3)
     #file_name ="authorize.jpg"
@@ -70,8 +70,8 @@ def capture_face(camera) -> bool:
         print("false")
         return False
 
-add_new_face(camera, "morgan")
-capture_face(camera)
+# add_new_face(camera, "morgan")
+# capture_face(camera)
 
 
 
