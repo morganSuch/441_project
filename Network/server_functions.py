@@ -24,6 +24,7 @@ def send_password(fields, conn) -> bool:
     field_list = str(fields)
     conn.send(field_list.encode())
     response = str(conn.recv(1024).decode())
+
     if str(response) == "added":
         print("Password added.")
         return True
@@ -34,12 +35,10 @@ def send_password(fields, conn) -> bool:
 # removes password from the database
 def edit_password(fields, conn) -> bool:
     conn.send("edit".encode())
-    ack0 = str(conn.recv(1024).decode())
-    if str(ack0) == "editing":
-        for field in fields:
-            conn.send(field.encode())
-
+    field_list = str(fields)
+    conn.send(field_list.encode())
     response = str(conn.recv(1024).decode())
+
     if str(response) == "edited":
         print("Password edited.")
         return True
@@ -59,13 +58,19 @@ def delete_password(fields, conn) -> bool:
         return False
 
 # gets password from database
-
-# removes password from the database
 def fetch_password(conn, app_name):
     conn.send("get_pass".encode())
     conn.send(app_name.encode())
     response = str(conn.recv(1024).decode())
-    print(response)
+    # print(response)
+    return response
+
+# gets username from database
+def fetch_name(conn, app_name):
+    conn.send("get_name".encode())
+    conn.send(app_name.encode())
+    response = str(conn.recv(1024).decode())
+    # print(response)
     return response
 
 # retreive applicatioon list from the database 
@@ -75,3 +80,20 @@ def fetch_application_names(conn) -> list:
     app_list = conn.recv(1024).decode()
     app_list = eval(app_list)
     return app_list
+
+def capture_image(conn, name):
+    conn.send("add_face".encode())
+    conn.send(name.encode())
+    response = str(conn.recv(1024).decode())
+    if str(response) == "yes":
+        return True
+    else:
+        return False
+
+def capture_finger(conn):
+    conn.send("add_finger".encode())
+    response = str(conn.recv(1024).decode())
+    if str(response) == "yes":
+        return True
+    else:
+        return False

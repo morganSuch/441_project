@@ -103,6 +103,16 @@ def fetch_password(cursor, conn, appName):
       userPassword = cursor.fetchone()
       return userPassword  
 
+def fetch_name(cursor, conn, appName):
+      cursor.execute("""
+      SELECT EMAIL_USERNAME
+      FROM PASSWORDS
+      WHERE APPLICATION = ?
+      """, (appName,))
+      
+      userPassword = cursor.fetchone()
+      return userPassword  
+
 # Face recognition functions
 def convert_to_binary(file):
       #converts the file to binary format

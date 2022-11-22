@@ -11,17 +11,20 @@ default_login_method = "finger"
 # Main function for bringing up application login screen
 def start_authentication(conn):
     root = Tk()
-    root.geometry("400x400")
+    root.geometry("375x225")
     root.title('Authentication Screen')
 
-    page_title = Label(root, text="  LOGIN", font=("Courier bold", 25))
+    page_title = Label(root, text="LOGIN", font=("Courier bold", 30))
     page_title.grid(column=0, row=0)
 
-    login_finger = Button(root, bg="white", fg="black", text="Finger Authentication",font=("Courier bold", 20), width=20, command=lambda: trigger_finger_auth(root, conn)) #client_login(root))
-    login_finger.grid(column=0, row=1)
+    inst = Label(root, text="Please select your preferred authentication method.", font=("Courier bold", 12))
+    inst.grid(column=0, row=1)
 
-    login_face = Button(root, bg="white", fg="black", text="Face Authentication",font=("Courier bold", 20), width=20, command=lambda: trigger_face_auth(root, conn)) #client_login(root))
-    login_face.grid(column=0, row=2)
+    login_finger = Button(root, bg="white", fg="black", text="Finger",font=("Courier bold", 20), width=15, command=lambda: trigger_finger_auth(root, conn)) #client_login(root))
+    login_finger.grid(column=0, row=2)
+
+    login_face = Button(root, bg="white", fg="black", text="Face",font=("Courier bold", 20), width=15, command=lambda: trigger_face_auth(root, conn)) #client_login(root))
+    login_face.grid(column=0, row=3)
 
     root.mainloop()
 

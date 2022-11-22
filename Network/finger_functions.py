@@ -14,6 +14,8 @@
 
 def testAuth() -> bool:
     return True
+def testAuth2() -> bool:
+    return False
 
 # def findFinger() -> bool:
 #     count = 0

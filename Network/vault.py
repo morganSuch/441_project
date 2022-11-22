@@ -10,7 +10,7 @@ button_dict = {}
 
 def vaultScreen(root, conn):
     window = Toplevel(root)
-    window.geometry('1000x500')
+    window.geometry('800x500')
     left = tk.Canvas(window, bg="black")
     left.place(x=-1,y=-1, width=192, height=1000 )
     middle = tk.Canvas(window, bg="white")
@@ -21,6 +21,7 @@ def vaultScreen(root, conn):
     page_title.grid(column=2, row=0)
     password_names= fetch_application_names(conn)
 
+    # LEFT COLUMN BUTTONS
     pass_title = Label(window, text="Password\n Menu", font=("Courier bold", 15), bg="black", fg="white")
     pass_title.grid(column=0, row=0)
 
@@ -33,27 +34,31 @@ def vaultScreen(root, conn):
     modify = Button(window, text="MODIFY",font=("Courier bold", 12),bg = "white", fg ="black", height=1, width=20,command=lambda: modify_pass(root, conn))
     modify.grid(column=0, row=3)
 
-    # settings = Button(window, text="USER SETTINGS",font=("Courier bold", 12),bg = "white", fg ="black", height=1, width=20,command=lambda: show_settings(root, conn))
-    # settings.grid(column=0, row=5)
-
     user_title = Label(window, text="User Menu", font=("Courier bold", 15), bg="black", fg="white")
     user_title.grid(column=0, row=4)    
     
-    add1 = Button(window, text="ADD FINGER",font=("Courier bold", 12), bg = "white", fg ="black",height=1, width=20,command=lambda: add_pass(root, conn))
+    add1 = Button(window, text="ADD FINGER",font=("Courier bold", 12), bg = "white", fg ="black",height=1, width=20,command=lambda: add_finger(root, conn))
     add1.grid(column=0, row=5)
 
-    delete1 = Button(window, text="REMOVE FINGER",font=("Courier bold", 12), bg = "white", fg ="black",height=1, width=20,command=lambda: add_pass(root, conn))
+    delete1 = Button(window, text="REMOVE FINGER",font=("Courier bold", 12), bg = "white", fg ="black",height=1, width=20,command=lambda: remove_finger(root, conn))
     delete1.grid(column=0, row=6)
 
-    # user_title = Label(window, text="User Menu", font=("Courier bold", 15), bg="black", fg="white")
-    # user_title.grid(column=0, row=7) 
-
-    add2 = Button(window, text="ADD FACE",font=("Courier bold", 12), bg = "white", fg ="black",height=1, width=20,command=lambda: add_pass(root, conn))
+    add2 = Button(window, text="ADD FACE",font=("Courier bold", 12), bg = "white", fg ="black",height=1, width=20,command=lambda: add_face(root, conn))
     add2.grid(column=0, row=7)
     
-    delete2 = Button(window, text="REMOVE FACE",font=("Courier bold", 12), bg = "white", fg ="black",height=1, width=20,command=lambda: add_pass(root, conn))
+    delete2 = Button(window, text="REMOVE FACE",font=("Courier bold", 12), bg = "white", fg ="black",height=1, width=20,command=lambda: remove_face(root, conn))
     delete2.grid(column=0, row=8)
+
+    func_title = Label(window, text="\nUser Functions", font=("Courier bold", 15), bg="black", fg="white")
+    func_title.grid(column=0, row=9)
+
+    gen = Button(window, text="GENERATE PASSWORD",font=("Courier bold", 12), bg = "white", fg ="black",height=1, width=20,command=lambda: gen_pass(root, conn))
+    gen.grid(column=0, row=10)
+
+    gen = Button(window, text="LOGOUT",font=("Courier bold", 12), bg = "white", fg ="black",height=1, width=20,command=lambda window=window: hide_screen(window))
+    gen.grid(column=0, row=11)
     
+    # MIDDLE COLUMN
     count = 1
     # Password Vault
     for name in password_names:
@@ -72,15 +77,19 @@ def vaultScreen(root, conn):
         #show_button = Button(window, text="Show",font= 15, command=lambda pass_text = pass_text, name = name, show_button = show_button: show_password(show_button, window, pass_text, name, button_dict))
         button_dict[name] = count
         count += 2
+ 
     window.mainloop()
 
 # function for showing password
 def copy_click(new_output, hide, dict, name, conn, user):
     grid_val = dict[name]
+
     secret = fetch_password(conn, name)
+    user_name = fetch_name(conn, name)
+
     user.config(state='normal')
     user.delete(0.0, tk.END)
-    user.insert(0.0, name)
+    user.insert(0.0, user_name)
     user.grid(column=2, row=grid_val)
     user.configure(state='disabled')
     new_output.config(state='normal')
@@ -97,27 +106,38 @@ def hide_password(hide_button, window, password, name, dict):
     grid_val = dict[name]
     password.config(state='normal')
     password.delete(0.0, tk.END)
-    password.insert(0.0, "***************")
+    password.insert(0.0, "   *****************")
     password.config(state='disabled')
 
 # functions for all button operations
-# TODO extract information from the input fields as text boxes
 
-# display vault screen
-def show_vault(root, conn):
-    vaultScreen(root, conn)
-
-# functions for all button operations
+# Password menu
 def add_pass(root, conn):
     addScreen(root, conn)
 
-# functions for all button operations
 def delete_pass(root, conn):
     deleteScreen(root, conn)
 
-# functions for all button operations
 def modify_pass(root, conn):
     modifyScreen(root, conn)
 
-def show_settings(root, conn):
-    settings_screen(root, conn)
+# User Menu
+def add_finger(root, conn):
+    finger_add_screen(root, conn)
+
+def remove_finger(root, conn):
+    finger_rem_screen(root, conn)
+
+def add_face(root, conn):
+    face_add_screen(root, conn)
+
+def remove_face(root, conn):
+    face_rem_screen(root, conn)
+
+def gen_pass(root, conn):
+    gen_pass_screen(root, conn)
+
+def hide_screen(window):
+    window.withdraw()
+
+

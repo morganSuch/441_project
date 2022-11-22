@@ -33,34 +33,43 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             else:
                 s.send("no".encode())
 
-        # if str(data) == "authorize_face":
-        #     # first we need to get all the faces from database
-        #     database = connect_database(DATABASE)
-        #     cursor = database.cursor()
-        #     # Saving files to local file directory
-        #     get_images(cursor, database)
-        #     # Calling facial recognition program 
-        #     authenticated = authenticate_face("/home/faces/")
+        if str(data) == "authorize_face":
+            # first we need to get all the faces from database
+            #database = connect_database(DATABASE)
+            #cursor = database.cursor()
+            # Saving files to local file directory
+            #get_images(cursor, database)
+            # Calling facial recognition program 
+            #authenticated = authenticate_face("/home/faces/")
+            #authenticate_face(face_dir, image)
+            authenticated = testAuth()
+            if authenticated:
+                s.send("yes".encode())
+            else:
+                s.send("no".encode())
+        if str(data) == "add_face":
+            image_id = str(s.recv(1024).decode())
+            #new_image = capture_face(image_id)
 
-        #     if authenticated:
-        #         s.send("yes".encode())
-        #     # This will be the failed response after 3 attempts
-        #     else:
-        #         s.send("no".encode())
-        # if str(data) == "add_face":
-        #     image_id = str(s.recv(1024).decode())
-        #     new_image = capture_face(image_id)
-        #     database = connect_database(DATABASE)
-        #     cursor = database.cursor()
-        #     add_face(cursor, database, image_id, new_image)
-        #     close_connection(database)
+            # Need something to add image to the face directory here
+
+            new_image = testAuth()
+            if new_image:
+                s.send("yes".encode())
+            else:
+                s.send("no".encode())
+
+        if str(data) == "add_finger":
+            added = testAuth2()
+            #added = add_finger()
+            if added:
+                s.send("yes".encode())
+            else:
+                s.send("no".encode())                
         
         if str(data) == "add":
             field_list = s.recv(1024).decode()
             field_list = eval(field_list)
-            # fields = s.recv(4096)
-            # fields = fields.decode()
-            # fields = eval(fields)
     
             #application = str(s.recv(1024).decode())
             application = field_list[0]
@@ -75,11 +84,13 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
                 s.send("added".encode())
 
         elif str(data) == "edit":
-            s.send("editing".encode())
-            application = str(s.recv(1024).decode())
-            type = str(s.recv(1024).decode())
-            value = str(s.recv(1024).decode())
-            # Encryption function should be added here!!!
+            field_list = s.recv(1024).decode()
+            field_list = eval(field_list)
+
+            application = field_list[0]
+            value = field_list[1]
+            type = field_list[2]
+
             database = connect_database(DATABASE)
             cursor = database.cursor()
             if (edit_information(cursor, database, application, type, value)):
@@ -108,5 +119,14 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             password = password[0]
             print(password)
             s.send(password.encode())
+        if str(data) == "get_name":
+            application = str(s.recv(1024).decode())
+            database = connect_database(DATABASE)
+            cursor = database.cursor()
+            password = fetch_name(cursor, database, application)
+            close_connection(database)
+            name = password[0]
+            print(name)
+            s.send(name.encode())
             
     s.close()
