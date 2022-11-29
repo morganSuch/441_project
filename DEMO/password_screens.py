@@ -167,10 +167,20 @@ def finger_add_screen(root, conn):
     
     inst = Label(window, text="\nThe scanner will take two images for a new print.\n \
         After pressing the button to tigger the scan look \nfor a purple light to signify the device is ready.\n", font=("Courier bold", 12))
-    inst.grid(column=0, row=2)
+    inst.grid(column=0, row=1)
+    
+    count =1
+    prints = fetch_prints(conn)
+    for print in prints:
+        print(print)
+        print = "print"+print
 
-    add = Button(window, text="SCAN",font=("Courier bold", 20), bg = "#C9BE62", fg ="white",height=1, width=15,command=lambda window=window: scan_finger(window, conn))
-    add.grid(column=0, row=3)
+        app_name = Button(window, text= str(print) ,font=("Courier bold", 12),bg="#F9F6EE", fg="#EB5406",  height=1, width=12)
+        app_name.grid(column=1, row=count, padx=10)
+        count += 1
+
+    # add = Button(window, text="SCAN",font=("Courier bold", 20), bg = "#C9BE62", fg ="white",height=1, width=15,command=lambda window=window: scan_finger(window, conn))
+    # add.grid(column=0, row=3)
 
 def security_question_screen(root, conn):
     window = Toplevel(root)
@@ -261,8 +271,9 @@ def finger_rem_screen(root, conn):
     window.geometry('400x250')
     window.title("REMOVE FINGER")
 
-    page_title = Label(window, text="Please pick a fingerprint to remove.", font=("Courier bold", 12))
+    page_title = Label(window, text="Please pick a fingerprint to remove.", font=("Courier bold", 14))
     page_title.grid(column=0, row=0)
+
 
 def face_add_screen(root, conn):
     window = Toplevel(root)
