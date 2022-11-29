@@ -102,6 +102,13 @@ def fetch_application_names(conn) -> list:
     app_list = eval(app_list)
     return app_list
 
+def fetch_prints(conn) -> list:
+    password_ids =[]
+    conn.send("get_prints".encode())
+    prints = conn.recv(1024).decode()
+    prints = eval(prints)
+    return prints
+
 def capture_image(conn, name):
     conn.send("add_face".encode())
     conn.send(name.encode())
