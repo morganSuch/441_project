@@ -181,7 +181,9 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             info = str(get_question(cursor, database))
             close_connection(database)
             s.send(info.encode())
-
+        if str(data) == "get_prints":
+            print_list = str(getPrints())
+            s.send(print_list.encode())
         if str(data) == "reset":
             # Removing all databases
             if os.path.exists(DATABASE):
@@ -198,6 +200,7 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             for f in os.listdir(dir):
                 os.remove(os.path.join(dir, f))
 
+            removePrints()
             s.send("done".encode())
         if str(data) == "close":
             break
