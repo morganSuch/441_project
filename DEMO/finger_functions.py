@@ -31,7 +31,7 @@ def removePrints() -> bool:
         return False
 
 def getPrints() -> list:
-    if scanner.read_templates == adafruit_fingerprint.OK:
+    if scanner.read_templates() == adafruit_fingerprint.OK:
         print_list = scanner.templates
         return print_list
 
