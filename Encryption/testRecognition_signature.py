@@ -86,12 +86,14 @@ def authenticate_face(camera) -> bool:
             with open(sig_path + file + ".sig", 'rb') as f:
                 signature = f.read()
         except IOError:
-            return False # Attempt to add an unauthorized face detected
+            return False # Signature not found attempt to add an unauthorized face detected
         if signer.verify(digest, signature):
             image = face_recognition.load_image_file("Faces/" + file)
             print(file)
             encoding = face_recognition.face_encodings(image)[0]
             known_encodings.append(encoding)
+        else:
+            return False # Signature did not match attempt to add an unauthorized face detected
     print(auth_encode)
     # Loop through each face found in the unknown image
     print(known_encodings)
