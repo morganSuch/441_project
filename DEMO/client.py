@@ -166,6 +166,12 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             password = password[0]
             print(password)
             s.send(password.encode())
+        if str(data) == "delete_print":
+            entry = str(s.recv(1024).decode())
+            if deletePrint(int(entry)):
+                s.send("yes".encode())
+            else:
+                s.send("no".encode())
         if str(data) == "get_name":
             application = str(s.recv(1024).decode())
             database = connect_database(DATABASE)
@@ -207,3 +213,4 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         
     s.send("closed".encode())
     s.close()
+
