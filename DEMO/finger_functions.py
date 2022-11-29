@@ -18,10 +18,22 @@ scanner = adafruit_fingerprint.Adafruit_Fingerprint(uart)
 #     return False
 
 def countPrints() -> bool:
-    if (scanner.count_templates()) > 0:
-        return False
+    if scanner.count_templates() == adafruit_fingerprint.OK:
+        if (scanner.template_count > 0):
+            return False
+        else:
+            return True 
+
+def removePrints() -> bool:
+    if scanner.empty_library() == adafruit_fingerprint.OK:
+        return True
     else:
-        return True 
+        return False
+
+def getPrints() -> list:
+    if scanner.read_templates == adafruit_fingerprint.OK:
+        print_list = scanner.templates
+        return print_list
 
 def findFinger() -> bool:
      count = 0
