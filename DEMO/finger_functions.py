@@ -35,6 +35,12 @@ def getPrints() -> list:
         print_list = scanner.templates
         return print_list
 
+def deletePrint(entry) -> bool:
+    if scanner.delete_model(entry) == adafruit_fingerprint.OK:
+        return True
+    else:
+        return False
+
 def findFinger() -> bool:
      count = 0
      # Let user try authentication 3 times
