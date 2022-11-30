@@ -6,6 +6,7 @@ import os
 #from ciphers import *
 from Crypto.PublicKey import RSA
 from face_authentication import *
+from encryption_functions import *
 camera = PiCamera()
 
 
@@ -60,6 +61,11 @@ priv_rsa = RSA.import_key(extern_priv)
 pub_rsa = RSA.import_key(extern_pub)
 print_count = 0
 
+# AES-256 key intialization for database encryption
+password = 'yfbgUIG3T4bc8dgtU83' # Password will be changed to something more complicated
+key = hashlib.sha256(password.encode('utf-8')).digest()
+chunksize = 64*1024
+
 # create socket object
 print("Starting Client")
 with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
@@ -76,7 +82,108 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         #     Encrpt data here
         #     encrypt(DATABASE, ENC_DATABASE)
         prints = countPrints()
-        # First communication to see if initiation sequence should be triggered
+        #
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        First communication to see if initiation sequence should be triggered
         if str(data) == "init":
             if(prints == 0):
                 # create databases
@@ -90,7 +197,7 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
                 cursor = database.cursor()
                 create_question_databse(cursor)
                 close_connection(database)
-                print_count = 1
+                print_count = 0
                 s.send("done".encode())
             else:
                 print_count = prints
@@ -100,7 +207,9 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             authenticated = findFinger()
             #authenticated = testAuth2()
             if authenticated:
-                # Decrypt here 
+                # Decrypt here
+                decrypt_db(key, chunksize, DATABASE)
+                decrypt_db(key, chunksize, SEC_DATABASE)
                 s.send("yes".encode())
             # This will be the failed response after 3 attempts
             else:
@@ -112,6 +221,8 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             if authenticated:
                 # Decrypt here
                 #decrypt(ENC_DATABASE, DATABASE)
+                decrypt_db(key, chunksize, DATABASE)
+                decrypt_db(key, chunksize, SEC_DATABASE)
                 s.send("yes".encode())
             else:
                 s.send("no".encode())
@@ -227,11 +338,15 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             s.send(name.encode())
         # Gets security question and answer for backup authentication
         if str(data) == "get_backup":
+            decrypt_db(key, chunksize, SEC_DATABASE)
             database = connect_database(SEC_DATABASE)
             cursor = database.cursor()
             info = str(get_question(cursor, database))
             close_connection(database)
             s.send(info.encode())
+        # Backup authentication successful
+        if str(data) == "backup_auth":
+            decrypt_db(key, chunksize, DATABASE)
         # Gets list of print locations for delete
         if str(data) == "get_prints":
             print_list = str(getPrints())
@@ -278,6 +393,8 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             s.send("done".encode())
         if str(data) == "logout":
             # encrypt database
+            encrypt_db(key, chunksize, DATABASE)
+            encrypt_db(key, chunksize, SEC_DATABASE)
             s.send("done".encode())
         if str(data) == "close":
             break

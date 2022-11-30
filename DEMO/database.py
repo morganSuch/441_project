@@ -73,14 +73,19 @@ def edit_information(cursor, conn, application, type, value) -> bool:
                               SET PASSWORD = ? \
                               WHERE APPLICATION = ?
                               """, (value, application))
-            else:
+                  conn.commit()
+                  print("password successfully edited")
+                  return True
+            elif type == "username":
                   cursor.execute(""" UPDATE PASSWORDS \
                               SET USERNAME = ? \
                               WHERE APPLICATION = ?
                               """, (value, application))
-            conn.commit()
-            print("Records successfully edited")
-            return True
+                  conn.commit()
+                  print("username successfully edited")
+                  return True
+            else:
+                return False  
       else:
             return False
 
