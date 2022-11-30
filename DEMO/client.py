@@ -17,11 +17,6 @@ ENC_DATABASE = "vault.db.enc"
 SEC_DATABASE = 'question.db'
 SEC_ENC_DATABASE = 'question.db.enc'
 
-<<<<<<< Updated upstream
-=======
-finger_count = 2
-
->>>>>>> Stashed changes
 # RSA Keys for image signatures
 extern_priv = """-----BEGIN RSA PRIVATE KEY-----
 MIIEowIBAAKCAQEApIi2HI7XMpNdOZYHSEnMBllQZUEtaXU33O1yCo1lPPh4k5Ou
@@ -130,7 +125,7 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
                 s.send("no".encode())
         # Adds Finger
         if str(data) == "add_finger":
-            added = addFinger(print_count)
+            added = addFinger(print_count + 1)
             if added:
                 print_count += 1
                 s.send("yes".encode())
@@ -242,14 +237,14 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             print_list = str(getPrints())
             print(print_list)
             print("Prints got")
-            s.send(print_list.encode()
+            s.send(print_list.encode())
         if str(data) == "delete_face":
             # Delete images
-            dir = "/home/pi/Faces"
-            sig = "/home/pi/Signatures"
+            dir = "/home/pi/Faces/"
+            sig = "/home/pi/Signatures/"
             face_id = str(s.recv(1024).decode())
             file_name = dir+face_id+".jpg"
-            sig_file = sig+face_id+".jpg"
+            sig_file = sig+face_id+".jpg.sig"
 
             if os.path.exists(file_name) and os.path.exists(sig_file):
                 os.remove(file_name)

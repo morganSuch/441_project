@@ -17,13 +17,10 @@ scanner = adafruit_fingerprint.Adafruit_Fingerprint(uart)
 # def testAuth2() -> bool:
 #     return False
 
-def countPrints() -> bool:
+def countPrints() -> int:
     if scanner.count_templates() == adafruit_fingerprint.OK:
-        if (scanner.template_count > 0):
-            return False
-        else:
-            return True 
-
+        return scanner.template_count
+    
 def removePrints() -> bool:
     if scanner.empty_library() == adafruit_fingerprint.OK:
         return True
