@@ -148,3 +148,21 @@ def end_connection(conn):
     if str(response) == 'closed':
         print('received close')
         conn.close()
+        
+def remove_finger(conn, entry):
+    conn.send("delete_print".encode())
+    conn.send(entry.encode())
+    response = str(conn.recv(1024).decode())
+    if str(response) == "yes":
+        return True
+    else:
+        return False
+
+def remove_face(conn, id):
+    conn.send("delete_face".encode())
+    conn.send(id.encode())
+    response = str(conn.recv(1024).decode())
+    if str(response) == "done":
+        return True
+    else:
+        return False
