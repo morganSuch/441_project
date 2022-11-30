@@ -271,10 +271,28 @@ def finger_rem_screen(root, conn):
     window.geometry('400x250')
     window.title("REMOVE FINGER")
 
-    page_title = Label(window, text="Please pick a fingerprint to remove.", font=("Courier bold", 14))
+    page_title = Label(window, text="Please select a fingerprint to delete.", font=("Courier bold", 14))
     page_title.grid(column=0, row=0)
 
-
+    sub = Label(window, text="NOTE: The primary print used when\nsetting up the device can not be removed.", font=("Courier bold", 12), fg="#3B9C9C")
+    sub.grid(column=0, row=1)
+    
+    count =2
+    prints = fetch_prints(conn)
+    #prints = [1,2,3,4]
+    prints.pop(0)
+    
+    if len(prints) == 0:
+        out = Label(window, text="There is only one registered print.\n This can not be removed.", font=("Courier bold", 14), fg="#C24641")
+        out.grid(column=0, row=1)
+    else:
+        for p in prints:
+            p = str(p)
+            p_id = "print "+ p
+            p_id = Button(window, text= p ,font=("Courier bold", 20),bg="#C9BE62", fg="white",  height=1, width=5, command=lambda entry=p, window=window: delete_print(conn, window, entry))
+            p_id.grid(column=0, row=count, padx=10)
+            count += 1
+    
 def face_add_screen(root, conn):
     window = Toplevel(root)
     window.geometry('425x325')
@@ -298,11 +316,20 @@ def face_add_screen(root, conn):
 
 def face_rem_screen(root, conn):
     window = Toplevel(root)
-    window.geometry('400x250')
+    window.geometry('350x200')
     window.title("REMOVE FACE")
 
-    page_title = Label(window, text="Add", font=("Courier bold", 10))
-    page_title.grid(column=0, row=0)
+    page_title = Label(window, text="Please enter the image ID for the\n face you wish to remove.", font=("Courier bold", 14))
+    page_title.grid(column=0, row=0, padx=20)
+
+    id = Text(window, height=1, width=20)
+    id.grid(column=0, row=2)
+    
+    blank = Label(window, text="", font=("Courier bold", 10))
+    blank.grid(column=0, row=3)
+
+    add = Button(window, text="DELETE",font=("Courier bold", 20), bg = "#6960EC", fg ="white",height=1, width=12,command=lambda window=window: remove_image(conn, window, id))
+    add.grid(column=0, row=4, padx=20)
 
 
 def take_photo(window, conn, id):
