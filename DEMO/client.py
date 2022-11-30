@@ -17,8 +17,6 @@ ENC_DATABASE = "vault.db.enc"
 SEC_DATABASE = 'question.db'
 SEC_ENC_DATABASE = 'question.db.enc'
 
-finger_count = 1
-
 # RSA Keys for image signatures
 extern_priv = """-----BEGIN RSA PRIVATE KEY-----
 MIIEowIBAAKCAQEApIi2HI7XMpNdOZYHSEnMBllQZUEtaXU33O1yCo1lPPh4k5Ou
@@ -60,6 +58,7 @@ MwIDAQAB
 
 priv_rsa = RSA.import_key(extern_priv)
 pub_rsa = RSA.import_key(extern_pub)
+print_count = 0
 
 # create socket object
 print("Starting Client")
@@ -76,8 +75,10 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         # if str(data) == "encrypt":
         #     Encrpt data here
         #     encrypt(DATABASE, ENC_DATABASE)
+        prints = countPrints()
+        # First communication to see if initiation sequence should be triggered
         if str(data) == "init":
-            if(countPrints()):
+            if(prints == 0):
                 # create databases
                 database = connect_database(DATABASE)
                 cursor = database.cursor()
@@ -89,10 +90,12 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
                 cursor = database.cursor()
                 create_question_databse(cursor)
                 close_connection(database)
+                print_count = 1
                 s.send("done".encode())
             else:
-               s.send("no".encode())
-
+                print_count = prints
+                s.send("no".encode())
+        # Authorizes Finger
         if str(data) == "authorize":
             authenticated = findFinger()
             #authenticated = testAuth2()
@@ -102,7 +105,7 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             # This will be the failed response after 3 attempts
             else:
                 s.send("no".encode())
-
+        # Authorizes Face
         if str(data) == "authorize_face":
             #authenticated = testAuth2()
             authenticated = authenticate_face(camera, pub_rsa)
@@ -112,26 +115,23 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
                 s.send("yes".encode())
             else:
                 s.send("no".encode())
+        # Adds Face
         if str(data) == "add_face":
             image_id = str(s.recv(1024).decode())
             new_image = add_face(camera, image_id, priv_rsa)
-
-            # Need something to add image to the face directory here
-            #new_image = testAuth()
             if new_image:
                 s.send("yes".encode())
             else:
                 s.send("no".encode())
-
+        # Adds Finger
         if str(data) == "add_finger":
-            #added = testAuth()
-            added = addFinger(finger_count)
+            added = addFinger(print_count)
             if added:
-                finger_count += 1
+                print_count += 1
                 s.send("yes".encode())
             else:
                 s.send("no".encode())                
-        
+        # Adds Security Question
         if str(data) == "add_question":
             entry = s.recv(4096).decode()
             entry_list = eval(entry)
@@ -146,17 +146,12 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
                 s.send("added".encode())
             else:
                 s.send("fail".encode())
-
-
+        # Adds Password
         if str(data) == "add":
             field_list = s.recv(1024).decode()
             field_list = eval(field_list)
-    
-            #application = str(s.recv(1024).decode())
             application = field_list[0]
-            #username = str(s.recv(1024).decode())
             username = field_list[1]
-            #password = str(s.recv(1024).decode())
             password = field_list[2]
             database = connect_database(DATABASE)
             cursor = database.cursor()
@@ -165,7 +160,7 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
                 s.send("added".encode())
             else:
                 s.send("fail".encode())
-
+        # Modifies Password
         elif str(data) == "edit":
             field_list = s.recv(1024).decode()
             field_list = eval(field_list)
@@ -184,7 +179,8 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
                 s.send("edited".encode())
             else:
                 s.send("fail".encode())
-
+        
+        # Deletes Password
         if str(data) == "delete":
             application = str(s.recv(1024).decode())
             database = connect_database(DATABASE)
@@ -194,12 +190,15 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
                 s.send("deleted".encode())
             else:
                 s.send("fail".encode())
-
+        
+        # Gets all application names to populate vault
         if str(data) == "get_apps":
             database = connect_database(DATABASE)
             cursor = database.cursor()
             app_list = str(get_application_names(cursor, database))
             s.send(app_list.encode())
+        
+        # Gets Password
         if str(data) == "get_pass":
             application = str(s.recv(1024).decode())
             database = connect_database(DATABASE)
@@ -209,12 +208,14 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             password = password[0]
             print(password)
             s.send(password.encode())
+        # Deletes fingerprint
         if str(data) == "delete_print":
             entry = str(s.recv(1024).decode())
             if deletePrint(int(entry)):
                 s.send("yes".encode())
             else:
                 s.send("no".encode())
+        # Gets username
         if str(data) == "get_name":
             application = str(s.recv(1024).decode())
             database = connect_database(DATABASE)
@@ -224,17 +225,35 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             name = password[0]
             print(name)
             s.send(name.encode())
+        # Gets security question and answer for backup authentication
         if str(data) == "get_backup":
             database = connect_database(SEC_DATABASE)
             cursor = database.cursor()
             info = str(get_question(cursor, database))
             close_connection(database)
             s.send(info.encode())
+        # Gets list of print locations for delete
         if str(data) == "get_prints":
             print_list = str(getPrints())
             print(print_list)
             print("Prints got")
-            s.send(print_list.encode())
+            s.send(print_list.encode()
+        if str(data) == "delete_face":
+            # Delete images
+            dir = "/home/pi/Faces"
+            sig = "/home/pi/Signatures"
+            face_id = str(s.recv(1024).decode())
+            file_name = dir+face_id+".jpg"
+            sig_file = sig+face_id+".jpg"
+
+            if os.path.exists(file_name) and os.path.exists(sig_file):
+                os.remove(file_name)
+                os.remove(sig_file)
+                s.send("done".encode())
+            else:
+                s.send("fail".encode())
+                   
+        # Device Hard Reset
         if str(data) == "reset":
             # Removing all databases
             if os.path.exists(DATABASE):
@@ -245,7 +264,7 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
                 os.remove(SEC_DATABASE)
             if os.path.exists(SEC_ENC_DATABASE):
                 os.remove(SEC_ENC_DATABASE)
-
+            
             # Delete images
             dir = "/home/pi/Faces"
             for f in os.listdir(dir):
@@ -254,9 +273,10 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             dir = "/home/pi/Signatures"
             for f in os.listdir(dir):
                 os.remove(os.path.join(dir, f))
-
+            # Erase all fingerprints from device
             removePrints()
             s.send("done".encode())
+
         if str(data) == "close":
             break
         
