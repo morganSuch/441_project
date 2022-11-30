@@ -23,8 +23,9 @@ def vaultScreen(root, conn):
 
 
 
-    def hide():
+    def hide(conn):
         window.withdraw()
+        send_logout(conn)
 
     # Setting delay time for lockout function
     lockout_time = 30
@@ -74,7 +75,7 @@ def vaultScreen(root, conn):
     gen = Button(window, text="SECURITY QUESTION",font=("Courier bold", 12), bg = "white", fg ="#C24641",height=1, width=20,command=lambda: security_question_screen_init(root, conn))
     gen.grid(column=5, row=3, padx=40)
 
-    lock = Button(window, text="LOGOUT",font=("Courier bold", 12), bg = "white", fg ="#C24641",height=1, width=20,command=lambda window=window: hide_screen(window))
+    lock = Button(window, text="LOGOUT",font=("Courier bold", 12), bg = "white", fg ="#C24641",height=1, width=20,command=lambda window=window: hide_screen(conn))
     lock.grid(column=5, row=4, padx=40)
 
     ref = Button(window, text="REFRESH",font=("Courier bold", 12), bg = "white", fg ="#C24641",height=1, width=20,command=lambda window=window: reset(root, window, conn))

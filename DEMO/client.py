@@ -281,7 +281,9 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
             # Erase all fingerprints from device
             removePrints()
             s.send("done".encode())
-
+        if str(data) == "logout":
+            # encrypt database
+            s.send("done".encode())
         if str(data) == "close":
             break
         
