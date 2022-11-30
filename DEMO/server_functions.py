@@ -166,3 +166,11 @@ def remove_face(conn, id):
         return True
     else:
         return False
+    
+def send_logout(conn):
+    conn.send("logout".encode())
+    response = str(conn.recv(1024).decode())
+    if str(response) == "done":
+        return True
+    else:
+        return False
