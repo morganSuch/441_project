@@ -396,3 +396,20 @@ def password_gen(window, conn, id):
     new_pass = Text(window, height=1, width=len)
     new_pass.insert(0.0, password)
     new_pass.grid(column=0, row=5)
+
+def delete_print(conn, window, entry):
+    if (True):
+        out = Label(window, text="Fingerprint successfully removed.", font=("Courier bold", 14), fg="green")
+        out.grid(column=0, row=5)
+    else:
+        out = Label(window, text="Fail!", font=("Courier bold", 14), fg="#C24641")
+        out.grid(column=0, row=4)
+
+def remove_image(conn, window, id):
+    id = id.get("1.0", "end-1c")
+    if remove_face(conn, id):
+        out = Label(window, text="Face successfully removed.", font=("Courier bold", 12), fg="green")
+        out.grid(column=0, row=5)
+    else:
+        out = Label(window, text="Unable to remove face,\nplease make ensure image ID exists.", font=("Courier bold", 12), fg="#C24641")
+        out.grid(column=0, row=5)
