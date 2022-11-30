@@ -144,9 +144,9 @@ def authenticate_face(camera, pub_rsa) -> bool:
         print("false")
         return False
 
-camera = PiCamera()
+#camera = PiCamera()
 #add_face(camera, "morgan", priv_rsa)
-authenticate_face(camera, pub_rsa)
-camera.close()
+#authenticate_face(camera, pub_rsa)
+#camera.close()
 
 

@@ -17,6 +17,11 @@ ENC_DATABASE = "vault.db.enc"
 SEC_DATABASE = 'question.db'
 SEC_ENC_DATABASE = 'question.db.enc'
 
+<<<<<<< Updated upstream
+=======
+finger_count = 2
+
+>>>>>>> Stashed changes
 # RSA Keys for image signatures
 extern_priv = """-----BEGIN RSA PRIVATE KEY-----
 MIIEowIBAAKCAQEApIi2HI7XMpNdOZYHSEnMBllQZUEtaXU33O1yCo1lPPh4k5Ou
