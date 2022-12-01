@@ -32,7 +32,7 @@ def send_password(fields, conn) -> bool:
         print("something went wrong")
         return False
 
-# Adds password to the database
+# Adds new backup question to database
 def send_question(conn, entry) -> bool:
     conn.send("add_question".encode())
     entry_list = str(entry)
@@ -45,7 +45,7 @@ def send_question(conn, entry) -> bool:
         print("something went wrong")
         return False
 
-# Adds password to the database
+# Gets password from database
 def fetch_question(conn) -> list:
     question_info =[]
     conn.send("get_backup".encode())
@@ -53,7 +53,7 @@ def fetch_question(conn) -> list:
     app_list = eval(app_list)
     return app_list
 
-# removes password from the database
+# Modifies password in the database
 def edit_password(fields, conn) -> bool:
     conn.send("edit".encode())
     field_list = str(fields)
@@ -67,7 +67,7 @@ def edit_password(fields, conn) -> bool:
         print("something went wrong")
         return False
 
-# removes password from the database
+# Removes password from the database
 def delete_password(fields, conn) -> bool:
     conn.send("delete".encode())
     for field in fields:
@@ -78,7 +78,7 @@ def delete_password(fields, conn) -> bool:
     else:
         return False
 
-# gets password from database
+# Gets password from database
 def fetch_password(conn, app_name):
     conn.send("get_pass".encode())
     conn.send(app_name.encode())
@@ -86,7 +86,7 @@ def fetch_password(conn, app_name):
     # print(response)
     return response
 
-# gets username from database
+# Gets username from database
 def fetch_name(conn, app_name):
     conn.send("get_name".encode())
     conn.send(app_name.encode())
@@ -94,7 +94,7 @@ def fetch_name(conn, app_name):
     # print(response)
     return response
 
-# retreive applicatioon list from the database 
+# Retreive applicatioon list from the database 
 def fetch_application_names(conn) -> list:
     password_ids =[]
     conn.send("get_apps".encode())
@@ -102,6 +102,7 @@ def fetch_application_names(conn) -> list:
     app_list = eval(app_list)
     return app_list
 
+# Get print list from biometric device
 def fetch_prints(conn) -> list:
     password_ids =[]
     conn.send("get_prints".encode())
@@ -109,6 +110,7 @@ def fetch_prints(conn) -> list:
     prints = eval(prints)
     return prints
 
+# Add image to client directory
 def capture_image(conn, name):
     conn.send("add_face".encode())
     conn.send(name.encode())
@@ -118,6 +120,7 @@ def capture_image(conn, name):
     else:
         return False
 
+# Add fingerprint to biometric device
 def capture_finger(conn):
     conn.send("add_finger".encode())
     response = str(conn.recv(1024).decode())
@@ -126,14 +129,7 @@ def capture_finger(conn):
     else:
         return False
 
-def send_encrypt(conn):
-    conn.send("encrypt".encode())
-    response = str(conn.recv(1024).decode())
-    if str(response) == "yes":
-        return True
-    else:
-        return False
-
+# Perform hard reset on the device 
 def trigger_reset(conn):
     conn.send("reset".encode())
     response = str(conn.recv(1024).decode())
@@ -142,6 +138,7 @@ def trigger_reset(conn):
     else:
         return False
 
+# Close connection with client
 def end_connection(conn):
     conn.send("close".encode())
     response = str(conn.recv(1024).decode())
@@ -149,6 +146,7 @@ def end_connection(conn):
         print('received close')
         conn.close()
         
+# Remove finger from biometric device
 def remove_finger(conn, entry):
     conn.send("delete_print".encode())
     conn.send(entry.encode())
@@ -158,6 +156,7 @@ def remove_finger(conn, entry):
     else:
         return False
 
+# Remove face from client image directory
 def remove_face(conn, id):
     conn.send("delete_face".encode())
     conn.send(id.encode())
@@ -167,6 +166,7 @@ def remove_face(conn, id):
     else:
         return False
     
+# Send logout message for client to encrypt database 
 def send_logout(conn):
     conn.send("logout".encode())
     response = str(conn.recv(1024).decode())

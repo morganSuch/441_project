@@ -1,12 +1,10 @@
-# echo-server.py
-from pickle import loads, dumps
 from login import *
 from OpenSSL import SSL
 import sys, os, select, socket
 
 # Code for TLS communication
 # Directory holding RSA cert
-dir = os.path.dirname('\Users\suchm\cs_labs\441_project\DEMO\cert')
+dir = os.path.dirname('\441_project\DEMO\cert')
 
 # Initializing context 
 ctx = SSL.Context(SSL.SSLv23_METHOD)

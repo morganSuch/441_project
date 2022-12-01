@@ -34,7 +34,7 @@ def addScreen(root, conn):
     submit = Button(window, text="SUBMIT",font=("Courier bold", 20), bg = "#C9BE62", fg ="white", height=1, width=10, command=lambda window=window: get_input(window, fields, conn, "add"))
     submit.grid(column=2, row=5)
 
-
+# Screen for deleting password from database
 def deleteScreen(root, conn):
     window = Toplevel(root)
     window.geometry('325x300')
@@ -59,6 +59,7 @@ def deleteScreen(root, conn):
     submit = Button(window, text="DELETE",font=("Courier bold", 20), bg = "#C24641", fg ="white", height=1, width=10, command=lambda window=window: get_input(window, fields, conn, "delete"))
     submit.grid(column=1, row=5)
 
+# Modifying password screen
 def modifyScreen(root, conn):
     window = Toplevel(root)
     window.geometry('500x325')
@@ -101,6 +102,7 @@ def modifyScreen(root, conn):
     submit = Button(window, text="SUBMIT",font=("Courier bold", 20), bg = "#6960EC", fg ="white", height=1, width=10, command=lambda window=window: modify_input(window, fields, conn, value_to_update, password2))
     submit.grid(column=2, row=7)    
 
+# Function for extracting text box input on screen
 def get_input(window, fields, conn, function):
     input_list = []
     out = Label(window, text="\n              Required field is missing.                 \nPlease fill in all fields and try again.\n", font=("Courier bold", 12), fg="red")
@@ -115,7 +117,8 @@ def get_input(window, fields, conn, function):
         else:
             input_list.append(input)
             print(input)
-            
+    
+    # Calling add function
     if function == "add":
         if send_password(input_list,conn):
             result = Label(window, text="\n         Password successfully added     \n\n", font=("Courier bold", 12), fg="green")
@@ -123,6 +126,7 @@ def get_input(window, fields, conn, function):
         else:
             result = Label(window, text="\n     Error adding password to database.\n", font=("Courier bold", 12), fg="red")
             result.grid(column=2, row=6)
+    # Calling delete function
     elif function == "delete":
         if delete_password(input_list, conn):
             result = Label(window, text="\n     Password successfully deleted               \n\n", font=("Courier bold", 12), fg="green")
@@ -131,6 +135,7 @@ def get_input(window, fields, conn, function):
             result = Label(window, text="\n     Error removing password from database.\n Please ensure the password you \nare attempting to remove exists.", font=("Courier bold", 12), fg="red")
             result.grid(column=1, row=6)
 
+# Function for getting modify input details
 def modify_input(window, fields, conn, val, check):
     input_list = []
     out = Label(window, text="\n             Required field is missing.                   \nPlease fill in all fields and try again.\n", font=("Courier bold", 12), fg="red")
@@ -155,8 +160,7 @@ def modify_input(window, fields, conn, val, check):
         result2 = Label(window, text="\n     Updated fields do not match. Please\nensure these values are the same \nand try again", font=("Courier bold", 12), fg="red")
         result2.grid(column=2, row=8)
 
-
-# User Menu Screens
+# Screen for adding a finger to the device
 def finger_add_screen(root, conn):
     window = Toplevel(root)
     window.geometry('400x250')
@@ -179,9 +183,7 @@ def finger_add_screen(root, conn):
         app_name.grid(column=1, row=count, padx=10)
         count += 1
 
-    # add = Button(window, text="SCAN",font=("Courier bold", 20), bg = "#C9BE62", fg ="white",height=1, width=15,command=lambda window=window: scan_finger(window, conn))
-    # add.grid(column=0, row=3)
-
+# Screen for updating security question in the database
 def security_question_screen(root, conn):
     window = Toplevel(root)
     window.geometry('400x300')
@@ -225,6 +227,7 @@ def security_question_screen_init(root, conn):
     add = Button(window, text="UPDATE",font=("Courier bold", 20), bg = "#C9BE62", fg ="white",height=1, width=12,command=lambda window=window: update_question_init(question, answer, conn, window))
     add.grid(column=1, row=3)
 
+# Gets text input from security question update screen
 def update_question(q, a, conn, window):
     entry = []
     entry.append(q.get("1.0", "end-1c"))
@@ -266,6 +269,7 @@ def update_question_init(q, a, conn, window):
             no.grid(column=1, row=4)
             print("fail")
 
+# Screen for removing finger from device
 def finger_rem_screen(root, conn):
     window = Toplevel(root)
     window.geometry('400x250')
@@ -292,7 +296,8 @@ def finger_rem_screen(root, conn):
             p_id = Button(window, text= p ,font=("Courier bold", 20),bg="#C9BE62", fg="white",  height=1, width=5, command=lambda entry=p, window=window: delete_print(conn, window, entry))
             p_id.grid(column=0, row=count, padx=10)
             count += 1
-    
+
+# Screen for adding a new image to the client recognition dir    
 def face_add_screen(root, conn):
     window = Toplevel(root)
     window.geometry('425x325')
@@ -314,6 +319,7 @@ def face_add_screen(root, conn):
     add = Button(window, text="CAPTURE",font=("Courier bold", 20), bg = "#C9BE62", fg ="white",height=1, width=12,command=lambda window=window: take_photo(window, conn, id))
     add.grid(column=0, row=4)
 
+# Screen for removing face from client recognition dir
 def face_rem_screen(root, conn):
     window = Toplevel(root)
     window.geometry('350x200')
@@ -331,7 +337,7 @@ def face_rem_screen(root, conn):
     add = Button(window, text="DELETE",font=("Courier bold", 20), bg = "#6960EC", fg ="white",height=1, width=12,command=lambda window=window: remove_image(conn, window, id))
     add.grid(column=0, row=4, padx=20)
 
-
+# Function for getting image ID and sending to client when adding new image
 def take_photo(window, conn, id):
     input = id.get("1.0", "end-1c")
     out = Label(window, text="\nNo name was given. \nPlease enter an image ID and try again.", font=("Courier bold", 12), fg="blue")
@@ -348,6 +354,7 @@ def take_photo(window, conn, id):
             no.grid(column=0, row=5)
             print("fail")
 
+# Function for verifying successful scan when adding fingerprint 
 def scan_finger(window, conn):
     if capture_finger(conn):
         yes = Label(window, text="\nFingerprint successfully added.", font=("Courier bold", 12), fg="green")
@@ -358,6 +365,7 @@ def scan_finger(window, conn):
         no = Label(window, text="\nFingerprint could not be added, some error occured.\n Please try again.", font=("Courier bold", 12), fg="red")
         no.grid(column=0, row=4)
 
+# Screen for generating password
 def gen_pass_screen(root, conn):
     window = Toplevel(root)
     window.geometry('400x300')
@@ -376,6 +384,7 @@ def gen_pass_screen(root, conn):
     add = Button(window, text="GENERATE",font=("Courier bold", 20), bg = "#C9BE62", fg ="white",height=1, width=12,command=lambda window=window: password_gen(window, conn, id))
     add.grid(column=0, row=3)
 
+# Function for generating password in generation screen
 def password_gen(window, conn, id):
     len = int(id.get("1.0", "end-1c"))
     letters = string.ascii_letters
@@ -397,6 +406,7 @@ def password_gen(window, conn, id):
     new_pass.insert(0.0, password)
     new_pass.grid(column=0, row=5)
 
+# Function for fingerprint removal output 
 def delete_print(conn, window, entry):
     if (True):
         out = Label(window, text="Fingerprint successfully removed.", font=("Courier bold", 14), fg="green")
@@ -405,6 +415,7 @@ def delete_print(conn, window, entry):
         out = Label(window, text="Fail!", font=("Courier bold", 14), fg="#C24641")
         out.grid(column=0, row=4)
 
+# Function for image removal output 
 def remove_image(conn, window, id):
     id = id.get("1.0", "end-1c")
     if remove_face(conn, id):

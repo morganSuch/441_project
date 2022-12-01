@@ -17,7 +17,6 @@ def start_authentication(conn):
     fake_window = Toplevel(root)
     fake_window.withdraw()
 
-    # bg = grey     fg = white
     page_title = Label(root, text="LOGIN", font=("Courier bold", 40), bg='#52595D', fg='white')
     page_title.grid(column=0, row=0)
 
@@ -46,9 +45,9 @@ def trigger_finger_auth(top_screen, conn, win2):
         yes.grid(column=0, row=0)
         window.withdraw()
         print("Authentication triggered")
-        #vaultScreen(top_screen)
         vaultScreen(top_screen, conn)
     else:
+        # Backup auth triggered
         print("Authentication failed, trying backup method")
         second_auth = Label(window, text="\nPrimary authentication method failed.\nPlease use camera to attempt backup authentication.\n", font=("Courier bold", 12), fg="#C24641", bg="#52595D")
         second_auth.grid(column=0, row=1)
@@ -69,9 +68,9 @@ def trigger_face_auth(top_screen, conn, win2):
         yes.grid(column=0, row=0)
         window.withdraw()
         print("Authentication triggered")
-        #vaultScreen(top_screen)
         vaultScreen(top_screen, conn)
     else:
+        # Backup auth triggered
         second_auth = Label(window, fg="#C24641", bg="#52595D", text="Primary authentication method failed.\nPlease use a backup method for authentication.\n", font=("Courier bold", 12))
         second_auth.grid(column=0, row=1, padx=20)
         login_finger = Button(window, bg="white", fg="#3B9C9C", text="Finger",font=("Courier bold", 17), width=15, command=lambda win2=window: trigger_finger_auth(window, conn, win2)) #client_login(root))
@@ -87,7 +86,6 @@ def run_setup(conn):
     root.configure(bg='#52595D')
     root.title('Setup Screen')
 
-    # bg = grey     fg = white
     page_title = Label(root, text="INITIAL SETUP", font=("Courier bold", 30), bg='#52595D', fg='white')
     page_title.grid(column=0, row=0, padx=20)
 
@@ -108,15 +106,15 @@ def run_setup(conn):
 
     root.mainloop()
 
+# Backup question answer screen
 def backup_question(root, conn):
     window = Toplevel(root)
     window.geometry('400x250')
     window.configure(bg='#52595D')
-    # Get question and answer from client
-    # print out question as a label
     page_title = Label(window,bg="#52595D", fg="white", text="Please answer the security question\nfor backup authentication\n", font=("Courier bold", 12))
     page_title.grid(column=1, row=0)
 
+    # Fetch question and answer from client 
     backup_info = fetch_question(conn)
     question= backup_info[0]
     real = backup_info[1]
@@ -134,8 +132,7 @@ def backup_question(root, conn):
     add = Button(window, text="LOGIN",font=("Courier bold", 20), bg = "#FF5F1F", fg ="white",height=1, width=12,command=lambda window=window: validate_backup(root, conn, answer, real, window))
     add.grid(column=1, row=3)
 
-    # Extract text from box and compare with answer
-
+# Validate backup question and answer 
 def validate_backup(root, conn, answer, real, window):
     answer = answer.get("1.0", "end-1c")
     print(answer)
@@ -155,11 +152,10 @@ def validate_backup(root, conn, answer, real, window):
         reset = Button(window, text="RESET",font=("Courier bold", 20), bg = "white", fg ="black",height=1, width=12,command=lambda window=window: reset_device(conn, window))
         reset.grid(column=1, row=7)
 
+# Hard reset device
 def reset_device(conn, window):
     if trigger_reset(conn):
         window.withdraw()
         print("cleared")
     else:
         print("failed")
-
-

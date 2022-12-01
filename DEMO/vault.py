@@ -1,14 +1,11 @@
 #!/usr/bin/python
-#from ssl import _PasswordType
 from tkinter import *
 import tkinter as tk
 from server_functions import *
 from password_screens import *
 import threading
 
-# For storing button locations when passwords need to be shown
-button_dict = {}
-
+# Main vault screen
 def vaultScreen(root, conn):
     window = Toplevel(root)
     window.geometry('850x490')
@@ -21,13 +18,12 @@ def vaultScreen(root, conn):
     header = tk.Canvas(window, bg='#52595D')
     header.place(x=-1,y=-1, width=1000, height=90 )
 
-
-
+    # Function for hiding vault screen on logout
     def hide(conn):
         window.withdraw()
         send_logout(conn)
 
-    # Setting delay time for lockout function
+    # Setting delay time for lockout function (sec)
     lockout_time = 30
     start_time = threading.Timer(lockout_time, hide)
     start_time.start()
@@ -170,6 +166,7 @@ def add_face(root, conn):
 def remove_face(root, conn):
     face_rem_screen(root, conn)
 
+# Settings and Tools
 def gen_pass(root, conn):
     gen_pass_screen(root, conn)
 

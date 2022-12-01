@@ -2,10 +2,12 @@
 from multiprocessing import connection
 import sqlite3
 
+# Connect to database
 def connect_database(name) -> sqlite3.Connection:
       conn = sqlite3.connect(name)
       return conn
 
+# Create password database
 def create_password_databse(cursor):
       cursor.execute("DROP TABLE IF EXISTS PASSWORDS")
 
@@ -16,6 +18,7 @@ def create_password_databse(cursor):
       
       print("Table created successfully\n")
 
+# Create question database
 def create_question_databse(cursor):
       cursor.execute("DROP TABLE IF EXISTS SECURITY_QUESTION")
 
@@ -25,6 +28,7 @@ def create_question_databse(cursor):
       
       print("Security Question Table created successfully.\n")
 
+# Add question to database
 def add_question(cursor, conn, question, answer) -> bool:
       try:
             cursor.execute("""
@@ -37,6 +41,7 @@ def add_question(cursor, conn, question, answer) -> bool:
       except:
             return False
 
+# Delete question from database
 def delete_question(cursor, conn):
       cursor.execute("""
             DELETE FROM SECURITY_QUESTION
@@ -45,8 +50,7 @@ def delete_question(cursor, conn):
       print("Records successfully deleted") 
       return True
 
-# Need to add the attaching to databse here which probably needs
-# to be initialized upon the client starting up
+# Add password to database
 def add_password(cursor, conn, application, username, password) -> bool:
       try:
             cursor.execute("""
@@ -60,6 +64,7 @@ def add_password(cursor, conn, application, username, password) -> bool:
       except:
             return False
 
+# Edit password in database
 def edit_information(cursor, conn, application, type, value) -> bool:
       appFound = False
       cursor.execute(""" SELECT EXISTS (SELECT APPLICATION FROM PASSWORDS WHERE APPLICATION = ?) """, (application,))
@@ -89,7 +94,7 @@ def edit_information(cursor, conn, application, type, value) -> bool:
       else:
             return False
 
-      
+# Delete password from database
 def delete_information(cursor, conn, app):
       appFound = False
       cursor.execute(""" SELECT EXISTS (SELECT APPLICATION FROM PASSWORDS WHERE APPLICATION = ?) """, (app,))
@@ -108,7 +113,7 @@ def delete_information(cursor, conn, app):
       else:
             return False
           
-
+# Get all application names for displaying in vault
 def get_application_names(cursor, conn) -> list:
       cursor.execute("""
       SELECT APPLICATION
@@ -121,6 +126,7 @@ def get_application_names(cursor, conn) -> list:
             listAppNames.append(x[0])      
       return listAppNames
 
+# Get question and answer from backup auth table
 def get_question(cursor, conn) -> list:
       info = []
       cursor.execute("""
@@ -139,6 +145,7 @@ def get_question(cursor, conn) -> list:
 
       return info  
 
+# Get password from database
 def fetch_password(cursor, conn, appName):
       cursor.execute("""
       SELECT PASSWORD
@@ -149,6 +156,7 @@ def fetch_password(cursor, conn, appName):
       userPassword = cursor.fetchone()
       return userPassword  
 
+# Get username from table
 def fetch_name(cursor, conn, appName):
       cursor.execute("""
       SELECT USERNAME
@@ -157,36 +165,10 @@ def fetch_name(cursor, conn, appName):
       """, (appName,))
       
       userPassword = cursor.fetchone()
-      return userPassword  
+      return userPassword
 
-# Face recognition functions
-def convert_to_binary(file):
-      #converts the file to binary format
-      with open(file, 'rb') as file:
-            blobData = file.read()
-      return blobData
-
-def write_to_file(blob, file):
-      with open(file, 'wb') as file:
-            file.write(blob)
-      print("Stored blob data into: ", file)
-
-
-def add_face(cursor, conn, id, photo):
-      image = convert_to_binary(photo)
-      #personName = input('Who is this image authenticating? Please enter full name. ')
-      #picFileName = input('What would you like this image name saved as? ')
-
-      cursor.execute("""
-            INSERT INTO FACIALREC (IMAGEID, IMAGE) \
-            VALUE (?,?) \
-            """, (id, image))
-      conn.commit()
-      print("Records created successfully")
-
+# Close connection to database
 def close_connection(conn):
       #closes SQLite connection
       if (conn):
             conn.close()
-
-

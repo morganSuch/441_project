@@ -1,6 +1,3 @@
-# Adding this file that has different authentication functions
-# so we can easily import into the client application script
-
 import adafruit_fingerprint
 import serial
 import time
@@ -12,32 +9,32 @@ MAX_FAILED_ATTEMPTS = 3
 uart = serial.Serial("/dev/serial0", baudrate=57600, timeout=1)
 scanner = adafruit_fingerprint.Adafruit_Fingerprint(uart)
 
-# def testAuth() -> bool:
-#     return True
-# def testAuth2() -> bool:
-#     return False
-
+# Counts number of fingerprints registered on the device
 def countPrints() -> int:
     if scanner.count_templates() == adafruit_fingerprint.OK:
         return scanner.template_count
-    
+
+# Clears all fingerprints from device
 def removePrints() -> bool:
     if scanner.empty_library() == adafruit_fingerprint.OK:
         return True
     else:
         return False
 
+# Get list of all print locations
 def getPrints() -> list:
     if scanner.read_templates() == adafruit_fingerprint.OK:
         print_list = scanner.templates
         return print_list
 
+# Delete fingerprint from device
 def deletePrint(entry) -> bool:
     if scanner.delete_model(entry) == adafruit_fingerprint.OK:
         return True
     else:
         return False
 
+# Find finger in system using scanner
 def findFinger() -> bool:
      count = 0
      # Let user try authentication 3 times
@@ -60,6 +57,7 @@ def findFinger() -> bool:
      # If they fail after 3 let server know authnetication has failed
      return False
 
+# Add new finger to device
 def addFinger(location) -> bool:
      # To be changed
      #location = 1 # Location the fingerprint is stored on the fingerprint scanner

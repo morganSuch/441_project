@@ -4,6 +4,7 @@ import hashlib
 import os
 import struct
 
+# Encrypt database 
 def encrypt_db(key, chunksize, db_name):
     if not os.path.exists(db_name):
         return # Database is already encrypted
@@ -24,6 +25,7 @@ def encrypt_db(key, chunksize, db_name):
     os.remove(db_name) # Deletes unencrypted database
     return
 
+# Decrypt database 
 def decrypt_db(key, chunksize, db_name):
     if not os.path.exists(db_name + ".enc"):
         return # Database is not encrypted

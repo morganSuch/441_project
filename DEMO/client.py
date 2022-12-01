@@ -1,4 +1,3 @@
-# echo-client.py
 from OpenSSL import SSL
 import sys, os, select, socket
 from finger_functions import *
@@ -30,43 +29,8 @@ SEC_DATABASE = 'question.db'
 SEC_ENC_DATABASE = 'question.db.enc'
 
 # RSA Keys for image signatures
-extern_priv = """-----BEGIN RSA PRIVATE KEY-----
-MIIEowIBAAKCAQEApIi2HI7XMpNdOZYHSEnMBllQZUEtaXU33O1yCo1lPPh4k5Ou
-OizGp2Bjk2iPHeCvlvbVLmHNciOKdXdUwCtNd+H+MMjGKnMo7ohFcUUtzLPqm2kr
-IOQoP1rVJCRJNYx7K1edbJNFhujaXmGSLjP/tpzQrgh4GTrr4im7Kv0isfEDnwOJ
-oxlZDP9I084496uc4NRvik0okJ5jajDHy/XetyX+fXtzI4tIby68xVPTYkEO6B+I
-ZpZAHEddWBW/WvRUdy5qCQZ+mTyo9SLTkLk/v2gNGmv/DK/xd5P3NLWZM8q8KbV2
-1wIPdcoVSj/dS2z7mBToJad7XafQOakAwpohMwIDAQABAoIBAEaRsHJNPbWeiRSi
-6ZqytERg2F+ldeHOedhTK1+lR6+/7o91fvvKqqWtbOgTp5asAQPh+It9PU3gOomp
-VftaV0686nZoFr6sR/kPD6HGhx9OZ6iikfH4id6qidKHkbLa/xUW7hlcjSyRAOAM
-P1N70Ai197c9QK2pnPSS64lDqzbgNGreWgIuFhdn8WIFb6mPuhgDZSnKWXNwi2Da
-lWRHw7S4jDpr46j1fBrCNnZrzCUFWxju8ah0Kt4z3bEfy60Gp/KUBx6HXihI6L5J
-Ap7n7rAZFTi3sqD+iytYzpsPXx8Ru404ww6kcpaHjm531aRhmaJZW5EaX8JK+p6/
-BzB6aeECgYEAtqvfeE4K4ZfTPN0yX29LdG4frV3oa/M+xKPSmvDGq/R2LQymRCIq
-ldi3Ms0hsQl9FuxlA8+ykB2x9OUcQCFufaiPdRMgzyVEs9ZsG3VW+KgVgnIfDJzl
-bLxRTUFlHgjFIKtYsyZeyf3qwr4ksNYbtO7e9KcdqiqtKMokNXPbjbECgYEA5pT2
-nSBE5iwDELoQfbrot7ERsqvBgKmh0taY/RR6RU7PnM8xiC1mzt+GDdtuqnoMasCO
-smMNOTGyYS522mQ0yI+duun69DnmME6l9AsmQ3v6wvYRxed/SjL+4xLDL+2DB2YG
-RykpGkD7EF9nkx1tyDSEhX/+/onwYbY7V/LYYiMCgYB88kTxihghRHMlb3tUEdE/
-u0+JivE+XWwynoegmU6bMaRfngZgFiqgwlJUukDwUjgwpNNXbwqJTvZ5NvlC2Fs2
-MkSl5MaNScWbaPAbPACYJohH6H1aaDr5TDokKLXcfE0x0mHicD1n1nlsaRi5qEnd
-UYJJP8Gnsncsrk9kDHJBkQKBgBWjSPk5u/11h9wb+cwyrAAA585Ce+gdAwiMBtNJ
-BqhWWvk2IEnNKOak5ymJu/rXdS7XXwyyat1BIqIoABNCcAmaII0Xw+sDO+ywlLYw
-Dakriz6cZNKThMhrvKuGaTaoLTGWi2RGIotKKcVBjrCphFHTS9RTTJSKUTp6JVt9
-eHzNAoGBAI0PQ+VfzQAZGKhepcQ1b7paVlreiSEv/algHroUtIHwlYEhwFYAffM4
-fuaMJcjIIfsjZA23Q8EGogWrJ61h7X29joFBX3AO22GTYrW9Mmj+zpTjPhKaAVIo
-u/xa30s2VxE6vRllGrleWChYlj3tec2UrwSb3EynGOXRUynUdK3o
------END RSA PRIVATE KEY-----"""
-
-extern_pub = """-----BEGIN PUBLIC KEY-----
-MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEApIi2HI7XMpNdOZYHSEnM
-BllQZUEtaXU33O1yCo1lPPh4k5OuOizGp2Bjk2iPHeCvlvbVLmHNciOKdXdUwCtN
-d+H+MMjGKnMo7ohFcUUtzLPqm2krIOQoP1rVJCRJNYx7K1edbJNFhujaXmGSLjP/
-tpzQrgh4GTrr4im7Kv0isfEDnwOJoxlZDP9I084496uc4NRvik0okJ5jajDHy/Xe
-tyX+fXtzI4tIby68xVPTYkEO6B+IZpZAHEddWBW/WvRUdy5qCQZ+mTyo9SLTkLk/
-v2gNGmv/DK/xd5P3NLWZM8q8KbV21wIPdcoVSj/dS2z7mBToJad7XafQOakAwpoh
-MwIDAQAB
------END PUBLIC KEY-----"""
+extern_priv = os.path.join('/441_project/DEMO/', 'image_sign')
+extern_pub = os.path.join('/441_project/DEMO/', 'image_sign.pub')
 
 priv_rsa = RSA.import_key(extern_priv)
 pub_rsa = RSA.import_key(extern_pub)
@@ -328,4 +292,3 @@ with SSL.Connection(ctx, socket.socket(socket.AF_INET, socket.SOCK_STREAM)):
         
     s.send("closed".encode())
     s.close()
-

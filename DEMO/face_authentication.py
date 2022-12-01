@@ -10,8 +10,7 @@ from Crypto.Hash import SHA256
 from Crypto import Random
 from base64 import b64encode, b64decode
 
-#camera = PiCamera()
-
+# Add face to image directory
 def add_face(camera, id, priv_rsa) -> bool:
     camera.start_preview()
     sleep(3)
@@ -43,19 +42,11 @@ def add_face(camera, id, priv_rsa) -> bool:
     image_file.writelines(str(image_encoding))
     image_file.close()"""
     return True
-    #image_list.append(image_encoding)
-    # Create arrays of known face encodings and their names
-    # known_face_encodings = [
-    #     image_encoding,
-    # ]
-    # known_face_names = [
-    #     "id"
-    # ]
 
+# Authenticate face with camera 
 def authenticate_face(camera, pub_rsa) -> bool:
     camera.start_preview()
     sleep(3)
-    #file_name ="authorize.jpg"
     camera.capture("authorize.jpg") # Face to be recognized
     camera.stop_preview()
     
@@ -103,10 +94,3 @@ def authenticate_face(camera, pub_rsa) -> bool:
     else:
         print("false")
         return False
-
-#camera = PiCamera()
-#add_face(camera, "morgan", priv_rsa)
-#authenticate_face(camera, pub_rsa)
-#camera.close()
-
-
